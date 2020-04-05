@@ -1,0 +1,24 @@
+Resultados Esperados Pruebas
+
+Prueba 01
+	Linea 12
+	Columna 14
+	Posible solucion: Se esperaba '
+Prueba 02
+	Linea 3
+	Columna 34
+	Posible error: Faltan operandos
+Prueba 03
+	No hay errores
+Prueba 04
+	Linea 6
+	Columna 20
+	Posible solucion: Se esperaba =
+Prueba 05
+	Linea 39
+	Columna 0
+	Posible solucion: Se esperaba }
+Prueba 06
+	Linea 12
+	Columna 0
+	No se han declarado correctamente y/o no existen TOKENS
