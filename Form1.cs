@@ -17,14 +17,12 @@ namespace LFA_Sergio_Lara
 		{
 			InitializeComponent();
 		}
-
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			listBoxEntrada.Text = "";
 			listBoxEntrada.Items.Add("Arrastre su documento .txt aqui para iniciar");
 			listBoxMensaje.Text = "";
 		}
-
 		private void listBoxEntrada_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
@@ -66,10 +64,14 @@ namespace LFA_Sergio_Lara
 					try
 					{
 						listBoxTXT.SetSelected(M.linea - 1, true);
-					}catch { }
+					}
+					catch { }
 				}
 				else
-					listBoxMensaje.Items.Add("No hay errores");	
+				{
+					//No hay errores en la primer Entrega
+					H.GuardarSets(paths[0]);
+				} 	
 			}
 		}
 

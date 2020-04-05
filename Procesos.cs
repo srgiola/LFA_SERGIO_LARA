@@ -11,7 +11,7 @@ namespace LFA_Sergio_Lara
 		private Nodo ArbolTOKENS = null;
 		private Nodo ArbolError = null;
 		private Nodo ArbolActions = null;
-		private List<string> ListaSETS = new List<string>();
+		private List<Set> ListaSETS = new List<Set>();
 		Arbol_ER A = new Arbol_ER();
 		private bool TOKENS_ = false;
 		private bool ACTIONS_ = false;
@@ -57,7 +57,7 @@ namespace LFA_Sergio_Lara
 					{ SETS = false; TOKENS = true; ACTIONS = false; TOKENS_ = true; }
 					else if (linea == "ACTIONS")
 					{ SETS = false; TOKENS = false; ACTIONS = true; ACTIONS_ = true; }
-					else if (linea.Length >= 7 && linea.Length <= 9 && TOKENS_ && ACTIONS_ && RESERVADAS_)
+					else if (linea.Length >= 7 && linea.Length <= 9 && ((TOKENS_ && ACTIONS_ && RESERVADAS_) || ERROR_))
 					{
 						try
 						{
@@ -90,8 +90,6 @@ namespace LFA_Sergio_Lara
 							Mensaje.columna = Mensaje.columna + espaciosQuitados;
 							return Mensaje;
 						}
-						if (Mensaje == null)
-							ListaSETS.Add(getIDSet(linea));
 					}
 					else if (TOKENS && linea != "\t" && linea != "")
 					{
@@ -207,8 +205,7 @@ namespace LFA_Sergio_Lara
 				return MensajeR;
 			}
 			return null; //Si el Mensaje es "nulo" no hubo errores en la sitaxis
-		}
-		
+		}		
 		private Mensaje RecorrerArbol(Nodo Nodo, ref string linea, ref int Index, ref bool Aceptacion, ref int lineaError, ref string lineaQuitar, Mensaje Mensaje = null)
 		{
 			if (Nodo.Contenido == "|" || Nodo.Contenido == "*")
@@ -487,8 +484,7 @@ namespace LFA_Sergio_Lara
 			SaltarDerecho:
 			return Mensaje;
 		}
-
-		public string getIDSet(string linea)
+		private string getIDSet(string linea)
 		{
 			string ID = "";
 			
@@ -502,8 +498,7 @@ namespace LFA_Sergio_Lara
 			}
 			return ID;
 		}
-
-		public Mensaje AnalizarER(string linea)
+		private Mensaje AnalizarER(string linea)
 		{
 			Mensaje Mensaje = null;
 			List<string> PalabrasReservadas = new List<string>();
@@ -601,10 +596,106 @@ namespace LFA_Sergio_Lara
 			else
 				return null;
 		}
-
-		public void SETS()
+		private int getCharset(string linea, int index)
 		{
-			
+			string numero = "";
+			for (int i = index; i < linea.Length; i++)
+			{
+				if (Char.IsDigit(linea[i]))
+					numero = numero + linea[i];
+				else
+					break;
+			}
+			return int.Parse(numero);
+		}
+		public void GuardarSets(string pathArchivo)
+		{
+			string linea = "";
+			using (var file = new StreamReader(pathArchivo))
+			{
+				while ((linea = file.ReadLine()) != null)
+				{
+					if (linea == "TOKENS")
+						break;
+					else if (linea == "SETS" || linea == "\n" || linea.Length == 0)
+					{ }
+					else
+					{
+						linea = linea.Replace("\t", "");
+						linea = linea.Replace(" ", "");
+						Set SET = new Set();
+						SET.ID = getIDSet(linea);
+						SET.Rangos = new List<Rango>();
+						linea = linea.Substring(SET.ID.Length + 1, linea.Length - SET.ID.Length - 1);
+						for (int i = 0; i < linea.Length; i++)
+						{
+							Rango Rango = new Rango();
+							if (linea[i] == '\'')
+							{
+								if ((linea.Length - i) <= 3)
+								{
+									Rango.Fin = Rango.Inicio = linea[i + 1];
+									SET.Rangos.Add(Rango);
+									i += 2;
+								}
+								else if (linea[i + 3] == '\'' || linea[i + 3] == '+' || linea[i + 3] == 'C')
+								{
+									Rango.Fin = Rango.Inicio = linea[i + 1];
+									SET.Rangos.Add(Rango);
+									i += 2;
+								}
+								else if (linea[i + 4] == '.' && linea[i + 5] == '\'')
+								{
+									Rango.Inicio = linea[i + 1];
+									Rango.Fin = linea[i + 6];
+									SET.Rangos.Add(Rango);
+									i += 7;
+								}
+								else if (linea[i + 4] == '.' && linea[i + 5] == 'C')
+								{
+									Rango.Inicio = linea[i + 1];
+									Rango.Fin = getCharset(linea, i + 9);
+									SET.Rangos.Add(Rango);
+									i += 9 + Rango.Fin.ToString().Length;
+								}
+							}
+							if (linea[i] == 'C')
+							{
+								var x = linea.ToCharArray();
+								int R = getCharset(linea, i + 4);
+								int length = R.ToString().Length;
+								if ((linea.Length - i) <= 8)
+								{
+									Rango.Fin = Rango.Inicio = getCharset(linea, i + 4);
+									SET.Rangos.Add(Rango);
+									i += 4 + Rango.Fin.ToString().Length;
+								}
+								else if (linea[i + 5 + length] == '\'' || linea[i + 5 + length] == '+' || linea[i + 5 + length] == 'C')
+								{
+									Rango.Fin = Rango.Inicio = R;
+									SET.Rangos.Add(Rango);
+									i += 4 + length;
+								}
+								else if (linea[i + 6 + length] == '.' && linea[i + 7 + length] == '\'')
+								{
+									Rango.Inicio = R;
+									Rango.Fin = linea[i + 8 + length];
+									SET.Rangos.Add(Rango);
+									i += 9 + length;
+								}
+								else if (linea[i + 6 + length] == '.' && linea[i + 7 + length] == 'C')
+								{
+									Rango.Inicio = R;
+									Rango.Fin = getCharset(linea, i + 11 + length);
+									SET.Rangos.Add(Rango);
+									i += 11 + Rango.Fin.ToString().Length + length;
+								}
+							}
+						}
+						ListaSETS.Add(SET);
+					}
+				}
+			}
 		}
 	}
 }

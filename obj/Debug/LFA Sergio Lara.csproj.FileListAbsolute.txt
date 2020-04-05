@@ -8,3 +8,13 @@ C:\Users\srgio\Documents\Programas Visual Studio\3er Año\LFA Sergio Lara\obj\De
 C:\Users\srgio\Documents\Programas Visual Studio\3er Año\LFA Sergio Lara\obj\Debug\LFA Sergio Lara.exe
 C:\Users\srgio\Documents\Programas Visual Studio\3er Año\LFA Sergio Lara\obj\Debug\LFA Sergio Lara.pdb
 C:\Users\srgio\Documents\Programas Visual Studio\3er Año\LFA Sergio Lara\obj\Debug\LFA Sergio Lara.csproj.CoreCompileInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\LFA Sergio Lara.exe.config
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\LFA Sergio Lara.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\LFA Sergio Lara.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA_Sergio_Lara.Form1.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA_Sergio_Lara.Properties.Resources.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.csproj.GenerateResource.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.csproj.CoreCompileInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.csprojAssemblyReference.cache
