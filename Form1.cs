@@ -70,7 +70,6 @@ namespace LFA_Sergio_Lara
 				else
 				{
 					//No hay errores en la primer Entrega
-					H.GuardarSets(paths[0]);
 				} 	
 			}
 		}
