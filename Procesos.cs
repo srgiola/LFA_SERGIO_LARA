@@ -99,7 +99,9 @@ namespace LFA_Sergio_Lara
 					{
 						if (ListaSETS.Count() < 1)
 						{
-							GuardarSets(pathArchivo);
+							Mensaje Mensaje2 = GuardarSets(pathArchivo);
+							if (Mensaje2 != null)
+								return Mensaje2;
 						}
 						int Index = 0;
 						bool Aceptacion = false;
@@ -117,7 +119,9 @@ namespace LFA_Sergio_Lara
 					{
 						if (ListaTokens.Count() < 1)
 						{
-							GuardarTokens(pathArchivo);	
+							Mensaje Mensaje2 = GuardarTokens(pathArchivo);
+							if (Mensaje2 != null)
+								return Mensaje2;
 						}
 						Mensaje Mensaje = null;
 						string ActionString = linea + "t";
@@ -597,6 +601,10 @@ namespace LFA_Sergio_Lara
 			else
 				return null;
 		}
+
+		//---------------------- SEGUNDA ENTREGA -------------------------------
+
+		//Validaciones de SETS y TOKENS
 		private string getIDSet(string linea)
 		{
 			string ID = "";
@@ -623,6 +631,7 @@ namespace LFA_Sergio_Lara
 			}
 			return int.Parse(numero);
 		}
+		//Aca modificar lo de { RESERVADAS() }
 		private string getER(string linea)
 		{
 			List<string> PalabrasReservadas = new List<string>();
@@ -650,6 +659,15 @@ namespace LFA_Sergio_Lara
 					catch { }
 					i += 2;
 				}
+				else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
+				{
+					//Quitar este if para la tercera fase
+					if (ER[ER.Length - 1] == '.')
+					{
+						ER = ER.Substring(0, ER.Length - 1);
+					}
+					i += 13;
+				}
 				else if (Char.IsLetter(linea[i]))
 				{
 					if (Char.IsUpper(linea[i]))
@@ -660,7 +678,10 @@ namespace LFA_Sergio_Lara
 					{
 						if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
 						{
-							ER += "<" + palabra + ">./(./)";
+							//Texto descomentar para la tercera fase
+							//ER += "<" + palabra + ">./(./)";
+							//i += 2;
+							
 							i += 2;
 						}
 						else
@@ -693,23 +714,34 @@ namespace LFA_Sergio_Lara
 			ER = "(" + ER + ")";
 			return ER;
 		}
-		private void GuardarSets(string pathArchivo)
+		private Mensaje GuardarSets(string pathArchivo)
 		{
 			string linea = "";
+			int indexLinea = 0;
 			using (var file = new StreamReader(pathArchivo))
 			{
 				while ((linea = file.ReadLine()) != null)
 				{
+					indexLinea++;
 					linea = linea.Replace("\t", "");
 					linea = linea.Replace(" ", "");
 					if (linea == "TOKENS")
-						break;
+						return null;
 					else if (linea == "SETS" || linea == "\n" || linea.Length == 0)
 					{ }
 					else
 					{
 						Set SET = new Set();
 						SET.ID = getIDSet(linea);
+						
+						bool Repetido = buscarSet(SET.ID);
+						if (Repetido)
+						{
+							Mensaje Mensaje = new Mensaje(indexLinea, 1);
+							Mensaje.texto = "El identificador del SET ya fue declarado anteriormente";
+							return Mensaje;
+						}
+
 						SET.Rangos = new List<Rango>();
 						linea = linea.Substring(SET.ID.Length + 1, linea.Length - SET.ID.Length - 1);
 						for (int i = 0; i < linea.Length; i++)
@@ -780,34 +812,71 @@ namespace LFA_Sergio_Lara
 					}
 				}
 			}
+			return null;
 		}
-		private void GuardarTokens(string pathArchivo)
+		private Mensaje GuardarTokens(string pathArchivo)
 		{
 			bool IN = false;
 			string linea = "";
+			int indexlinea = 0;
 			using (var file = new StreamReader(pathArchivo))
 			{
 				while ((linea = file.ReadLine()) != null)
 				{
+					indexlinea++;
 					linea = linea.Replace("\t", "");
 					linea = linea.Replace(" ", "");
 					if (linea == "ACTIONS")
-						break;
+						return null;
 					if (linea == "TOKENS")
 						IN = true;
 					else if (IN && linea.Length > 5)
 					{
 						Token Token = new Token();
 						Token.ID = getCharset(linea, 5);
-						var x = linea.ToCharArray();
-						int x1 = Token.ID.ToString().Length;
-						int x2 = linea.Length;
+						if (buscarToken(Token.ID))
+						{
+							Mensaje Mensaje = new Mensaje(indexlinea, 6);
+							Mensaje.texto = "El identificador del TOKEN ya fue declarado anteriormente";
+							return Mensaje;
+						}
 						linea = linea.Substring((6 + Token.ID.ToString().Length), (linea.Length - Token.ID.ToString().Length - 6));
 						Token.ER = getER(linea);
 						ListaTokens.Add(Token);
 					}
 				}
 			}
+			return null;
+		}
+		private bool buscarToken(int ID)
+		{
+			foreach (var item in ListaTokens)
+			{
+				if (item.ID == ID)
+					return true;
+			}
+			return false;
+		}
+		private bool buscarSet(string ID)
+		{
+			foreach (var item in ListaSETS)
+			{
+				if (item.ID == ID)
+					return true;
+			}
+			return false;
+		}
+		public Nodo ArbolTokens()
+		{
+			string ER = "(";
+			foreach (var item in ListaTokens)
+			{
+				ER = ER + item.ER + "|";
+			}
+			ER = ER.Substring(0, ER.Length - 1);
+			ER += ")";
+			Nodo Arbol = A.Arbol(ER);
+			return Arbol;
 		}
 	}
 }

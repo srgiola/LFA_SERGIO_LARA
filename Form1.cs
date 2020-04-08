@@ -70,6 +70,8 @@ namespace LFA_Sergio_Lara
 				else
 				{
 					//No hay errores en la primer Entrega
+					Form2 F2 = new Form2(H.ArbolTokens());
+					F2.ShowDialog();
 				} 	
 			}
 		}

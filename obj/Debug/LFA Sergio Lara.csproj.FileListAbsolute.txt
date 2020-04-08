@@ -18,3 +18,4 @@ C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Serg
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.exe
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.pdb
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.csprojAssemblyReference.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA_Sergio_Lara.Form2.resources
