@@ -11,6 +11,7 @@ namespace LFA_Sergio_Lara
 		Nodo Arbol = new Nodo();
 		List<string[]> RowFLN = new List<string[]>();
 		List<string[]> RowFollow = new List<string[]>();
+		Dictionary<int, List<int>> Follow = new Dictionary<int, List<int>>();
 		public Tablas(Nodo Arbol)
 		{
 			this.Arbol = Arbol;
@@ -21,6 +22,10 @@ namespace LFA_Sergio_Lara
 			AsignarHojas(Arbol, ref n);
 			AsignarFLN(Arbol);
 			AsignarFollow(Arbol);
+
+			for (int i = 1; i < n; i++)
+				Follow.Add(i, new List<int>());
+
 			LlenarTablaFLN(Arbol);
 			LlenarTablaFollow(Arbol);
 		}
@@ -122,11 +127,30 @@ namespace LFA_Sergio_Lara
 		}
 		private void LlenarTablaFollow(Nodo Nodo)
 		{
+			if (Nodo.Izquierdo != null)
+				LlenarTablaFollow(Nodo.Izquierdo);
+
+			if (Nodo.Follow.Count > 0)
+			{
+				foreach (var last in Nodo.Last)
+					Follow[last].AddRange(Nodo.Follow);
+			}
+
+			if (Nodo.Derecho != null)
+				LlenarTablaFollow(Nodo.Derecho);
 		}
 		public List<string[]> getTablaFLN()
 		{ return RowFLN; }
 		public List<string[]> getTablaFollow()
 		{
+			foreach (var item in Follow)
+			{
+				string f = "";
+				foreach (var item_ in item.Value)
+					f += item_ + ", ";
+				string[] row = new string[] { item.Key.ToString(), f};
+				RowFollow.Add(row);
+			}
 			return RowFollow; 
 		}
 	}
