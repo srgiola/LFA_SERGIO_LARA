@@ -11,7 +11,12 @@ namespace LFA_Sergio_Lara
 		Nodo Arbol = new Nodo();
 		List<string[]> RowFLN = new List<string[]>();
 		List<string[]> RowFollow = new List<string[]>();
+		List<string[]> RowEstados = new List<string[]>();
+		List<string> ST = new List<string>();
 		Dictionary<int, List<int>> Follow = new Dictionary<int, List<int>>();
+		Dictionary<int, string> Hojas = new Dictionary<int, string>();
+		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
+
 		public Tablas(Nodo Arbol)
 		{
 			this.Arbol = Arbol;
@@ -28,6 +33,7 @@ namespace LFA_Sergio_Lara
 
 			LlenarTablaFLN(Arbol);
 			LlenarTablaFollow(Arbol);
+			Ecloshure(Arbol.First);
 		}
 		private void AsignarHojas(Nodo Nodo, ref int n)
 		{
@@ -46,6 +52,10 @@ namespace LFA_Sergio_Lara
 				List<int> L = new List<int>();
 				L.Add(n);
 				Nodo.First = Nodo.Last = L;
+				if (!Hojas.ContainsKey(n))
+					Hojas.Add(n, Nodo.Contenido);
+				if (!ST.Contains(Nodo.Contenido))
+					ST.Add(Nodo.Contenido);
 				n++;
 			}
 
@@ -139,6 +149,73 @@ namespace LFA_Sergio_Lara
 			if (Nodo.Derecho != null)
 				LlenarTablaFollow(Nodo.Derecho);
 		}
+		private void Ecloshure(List<int> Estado)
+		{
+			string S3 = "";
+			foreach (var item in Estado)
+				S3 += item + ", ";
+			S3 = S3.Substring(0, S3.Length - 2);
+
+			if (!Estados.ContainsKey(S3))
+			{
+				string S = "";
+				string[] T = new string[ST.Count()];
+				List<List<int>> AuxEstados = new List<List<int>>();
+
+				foreach (var item in Estado)
+				{
+					string value = "";
+					Hojas.TryGetValue(item, out value);
+					List<int> Follows = new List<int>();
+					Follow.TryGetValue(item, out Follows);
+					int i = getIndex(value);
+					Follows.Sort();
+					string S2 = "";
+					foreach (var item_ in Follows)
+						S2 += item_ + ", ";
+
+					if (S2.Length > 2)
+					{
+						if (T[i] != null)
+						{
+							T[i] = T[i].Replace(" ","");
+							string[] C = T[i].Split(',');
+							List<int> numeroInT = new List<int>();
+							foreach (var numeroString in C)
+							{
+								if (numeroString.Length > 0)
+									numeroInT.Add(int.Parse(numeroString));
+							}
+							foreach (var item2 in Follows)
+							{
+								if (!numeroInT.Contains(item2))
+									numeroInT.Add(item2);
+							}
+							S2 = "";
+							numeroInT.Sort();
+							foreach (var item2 in numeroInT)
+							{
+								S2 += item2 + ", ";
+							}
+							T[i] = S2;
+						}
+						else
+						{
+							S2 = S2.Substring(0, S2.Length - 2);
+							//AuxEstados.Add(Follows);
+							T[i] = S2;
+						}
+					}
+					S += item + ", ";
+				}
+				S = S.Substring(0, S.Length - 2);
+				Estados.Add(S, T);
+
+				AuxEstados = getListas(T);
+				foreach (var item in AuxEstados)
+					Ecloshure(item);
+			}
+		}
 		public List<string[]> getTablaFLN()
 		{ return RowFLN; }
 		public List<string[]> getTablaFollow()
@@ -152,6 +229,57 @@ namespace LFA_Sergio_Lara
 				RowFollow.Add(row);
 			}
 			return RowFollow; 
+		}
+		public List<string[]> getTablaEstados()
+		{
+			foreach (var item in Estados)
+			{
+				string[] row = new string[ST.Count() + 1];
+				row[0] = item.Key;
+				for (int i = 1; i < ST.Count() + 1; i++)
+				{
+					if (item.Value[i - 1] == null)
+						row[i] = "---";
+					else
+						row[i] = item.Value[i - 1];
+				}
+				RowEstados.Add(row);
+			}
+			return RowEstados;
+		}
+		public List<string> getColumnas()
+		{
+			return ST;
+		}
+		private int getIndex(string value)
+		{
+			for (int i = 0; i < ST.Count(); i++)
+			{
+				if (ST[i] == value)
+					return i;
+			}
+			return -1;
+		}
+		private List<List<int>> getListas(string [] Columnas)
+		{
+			List<List<int>> Retorno = new List<List<int>>();
+			foreach (string item in Columnas)
+			{
+				if (item != null)
+				{
+					List<int> Colum = new List<int>();
+					string NS = item.Replace(" ", "");
+					string[] C = NS.Split(',');
+					foreach (var item2 in C)
+					{
+						if (item2.Length > 0)
+							Colum.Add(int.Parse(item2));
+					}
+					Colum.Sort();
+					Retorno.Add(Colum);
+				}
+			}
+			return Retorno;
 		}
 	}
 }

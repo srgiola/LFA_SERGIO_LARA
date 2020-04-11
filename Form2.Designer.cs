@@ -30,22 +30,23 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
 			this.Tabla_Follow = new System.Windows.Forms.DataGridView();
+			this.Simbolo_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Follow = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.Tabla_Estados = new System.Windows.Forms.DataGridView();
 			this.label3 = new System.Windows.Forms.Label();
-			this.Grafo = new System.Windows.Forms.Panel();
 			this.label4 = new System.Windows.Forms.Label();
 			this.Tabla_FLN = new System.Windows.Forms.DataGridView();
 			this.Simbolo = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.First = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Last = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Nullable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Simbolo_ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Follow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_Follow)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_Estados)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_FLN)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// Tabla_Follow
@@ -59,6 +60,16 @@
 			this.Tabla_Follow.Name = "Tabla_Follow";
 			this.Tabla_Follow.Size = new System.Drawing.Size(244, 412);
 			this.Tabla_Follow.TabIndex = 1;
+			// 
+			// Simbolo_
+			// 
+			this.Simbolo_.HeaderText = "Simbolo";
+			this.Simbolo_.Name = "Simbolo_";
+			// 
+			// Follow
+			// 
+			this.Follow.HeaderText = "Follow";
+			this.Follow.Name = "Follow";
 			// 
 			// label1
 			// 
@@ -97,18 +108,9 @@
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label3.Location = new System.Drawing.Point(12, 456);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(116, 16);
+			this.label3.Size = new System.Drawing.Size(144, 16);
 			this.label3.TabIndex = 5;
-			this.label3.Text = "Tabla de Estados";
-			// 
-			// Grafo
-			// 
-			this.Grafo.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.Grafo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.Grafo.Location = new System.Drawing.Point(712, 32);
-			this.Grafo.Name = "Grafo";
-			this.Grafo.Size = new System.Drawing.Size(646, 671);
-			this.Grafo.TabIndex = 6;
+			this.label3.Text = "Tabla de Transiciones";
 			// 
 			// label4
 			// 
@@ -154,15 +156,15 @@
 			this.Nullable.HeaderText = "Nullable";
 			this.Nullable.Name = "Nullable";
 			// 
-			// Simbolo_
+			// pictureBox1
 			// 
-			this.Simbolo_.HeaderText = "Simbolo";
-			this.Simbolo_.Name = "Simbolo_";
-			// 
-			// Follow
-			// 
-			this.Follow.HeaderText = "Follow";
-			this.Follow.Name = "Follow";
+			this.pictureBox1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.pictureBox1.Location = new System.Drawing.Point(722, 30);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(636, 671);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox1.TabIndex = 0;
+			this.pictureBox1.TabStop = false;
 			// 
 			// Form2
 			// 
@@ -170,9 +172,9 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ActiveBorder;
 			this.ClientSize = new System.Drawing.Size(1370, 749);
+			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.Tabla_FLN);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.Grafo);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.Tabla_Estados);
 			this.Controls.Add(this.label2);
@@ -186,6 +188,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_Follow)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_Estados)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.Tabla_FLN)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -197,7 +200,6 @@
 		private System.Windows.Forms.Label label2;
 		public System.Windows.Forms.DataGridView Tabla_Estados;
 		private System.Windows.Forms.Label label3;
-		public System.Windows.Forms.Panel Grafo;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.DataGridView Tabla_FLN;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Simbolo;
@@ -206,5 +208,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Nullable;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Simbolo_;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Follow;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
