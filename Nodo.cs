@@ -12,5 +12,6 @@ namespace LFA_Sergio_Lara
 		public List<int> Last { get; set; }
 		public bool Nullable { get; set; }
 		public List<int> Follow { get; set; }
+		public int ID { get; set; }
 	}
 }

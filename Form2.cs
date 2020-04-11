@@ -37,9 +37,9 @@ namespace LFA_Sergio_Lara
 				Tabla_Estados.Rows.Add(item);
 
 			//Dibujar Arbol
-			string pathImagen = Path.Combine(Application.StartupPath, "Arbol.jpeg");
-
-			pictureBox1.Image = Image.FromFile("Arbol.jpg");
+			GrafoAB Grafo = new GrafoAB(Arbol);
+			string pathApp = Environment.CurrentDirectory;
+			pictureBox1.Image = Grafo.CrearGrafo(pathApp);
 		}
 
 		private void label1_Click(object sender, EventArgs e)

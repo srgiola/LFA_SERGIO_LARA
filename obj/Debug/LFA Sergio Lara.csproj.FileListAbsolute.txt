@@ -19,3 +19,31 @@ C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Serg
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.pdb
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA Sergio Lara.csprojAssemblyReference.cache
 C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\obj\Debug\LFA_Sergio_Lara.Form2.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\cdt.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\cgraph.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\dot.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\freetype6.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\gvc.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\gvplugin_core.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\gvplugin_dot_layout.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\gvplugin_gd.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\gvplugin_gdiplus.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\iconv.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\intl.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\jpeg62.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libcairo-2.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libexpat-1.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libexpat.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libfontconfig-1.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libfreetype-6.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libglib-2.0-0.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libgmodule-2.0-0.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libgobject-2.0-0.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libgthread-2.0-0.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libpng12.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libpng14-14.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\libxml2.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\ltdl.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\Pathplan.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\zlib1.dll
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Graphviz\config6
