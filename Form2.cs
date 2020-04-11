@@ -36,6 +36,9 @@ namespace LFA_Sergio_Lara
 			foreach (var item in RowEstados)
 				Tabla_Estados.Rows.Add(item);
 
+			//Dibujar Arbol
+			string pathImagen = Path.Combine(Application.StartupPath, "Arbol.jpeg");
+
 			pictureBox1.Image = Image.FromFile("Arbol.jpg");
 		}
 
@@ -51,8 +54,6 @@ namespace LFA_Sergio_Lara
 
 		private void Form2_Load(object sender, EventArgs e)
 		{
-			//string pathImagen = Path.Combine(Application.StartupPath, "Arbol.jpeg");
-			//pictureBox1.Image.Save(pathImagen, ImageFormat.Jpeg);
 		}
 	}
 }

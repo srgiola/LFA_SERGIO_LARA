@@ -300,6 +300,14 @@ namespace LFA_Sergio_Lara
 				{
 					try
 					{
+						if (linea.Substring(0, 4).All(o => char.IsDigit(o)))
+						{
+							Index += 4;
+							lineaQuitar += linea.Substring(0, 4);
+							linea = linea.Substring(4, linea.Length - 4);
+							Aceptacion = true;
+							Mensaje = null;
+						}
 						if (linea.Substring(0, 3).All(o => char.IsDigit(o)))
 						{
 							Index += 3;
@@ -331,29 +339,65 @@ namespace LFA_Sergio_Lara
 							return Mensaje;
 						}
 					}
-					catch
+					catch 
 					{
-						if (linea.Substring(0, 2).All(o => char.IsDigit(o)))
+						try
 						{
-							Index += 2;
-							lineaQuitar += linea.Substring(0, 2);
-							linea = linea.Substring(2, linea.Length - 2);
-							Aceptacion = true;
-							Mensaje = null;
+							if (linea.Substring(0, 3).All(o => char.IsDigit(o)))
+							{
+								Index += 3;
+								lineaQuitar += linea.Substring(0, 3);
+								linea = linea.Substring(3, linea.Length - 3);
+								Aceptacion = true;
+								Mensaje = null;
+							}
+							else if (linea.Substring(0, 2).All(o => char.IsDigit(o)))
+							{
+								Index += 2;
+								lineaQuitar += linea.Substring(0, 2);
+								linea = linea.Substring(2, linea.Length - 2);
+								Aceptacion = true;
+								Mensaje = null;
+							}
+							else if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+							{
+								Index += 1;
+								lineaQuitar += linea.Substring(0, 1);
+								linea = linea.Substring(1, linea.Length - 1);
+								Aceptacion = true;
+								Mensaje = null;
+							}
+							else
+							{
+								Mensaje = new Mensaje(1, Index);
+								Mensaje.texto = "Posible solucion: Se esperaba Numero";
+								return Mensaje;
+							}
 						}
-						else if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+						catch
 						{
-							Index += 1;
-							lineaQuitar += linea.Substring(0, 1);
-							linea = linea.Substring(1, linea.Length - 1);
-							Aceptacion = true;
-							Mensaje = null;
-						}
-						else
-						{
-							Mensaje = new Mensaje(1, Index);
-							Mensaje.texto = "Posible solucion: Se esperaba Numero";
-							return Mensaje;
+							if (linea.Substring(0, 2).All(o => char.IsDigit(o)))
+							{
+								Index += 2;
+								lineaQuitar += linea.Substring(0, 2);
+								linea = linea.Substring(2, linea.Length - 2);
+								Aceptacion = true;
+								Mensaje = null;
+							}
+							else if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+							{
+								Index += 1;
+								lineaQuitar += linea.Substring(0, 1);
+								linea = linea.Substring(1, linea.Length - 1);
+								Aceptacion = true;
+								Mensaje = null;
+							}
+							else
+							{
+								Mensaje = new Mensaje(1, Index);
+								Mensaje.texto = "Posible solucion: Se esperaba Numero";
+								return Mensaje;
+							}
 						}
 					}
 				}

@@ -58,7 +58,7 @@
             this.Follow});
 			this.Tabla_Follow.Location = new System.Drawing.Point(462, 32);
 			this.Tabla_Follow.Name = "Tabla_Follow";
-			this.Tabla_Follow.Size = new System.Drawing.Size(244, 412);
+			this.Tabla_Follow.Size = new System.Drawing.Size(244, 333);
 			this.Tabla_Follow.TabIndex = 1;
 			// 
 			// Simbolo_
@@ -97,16 +97,16 @@
 			// 
 			this.Tabla_Estados.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
 			this.Tabla_Estados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.Tabla_Estados.Location = new System.Drawing.Point(15, 475);
+			this.Tabla_Estados.Location = new System.Drawing.Point(15, 404);
 			this.Tabla_Estados.Name = "Tabla_Estados";
-			this.Tabla_Estados.Size = new System.Drawing.Size(691, 226);
+			this.Tabla_Estados.Size = new System.Drawing.Size(691, 297);
 			this.Tabla_Estados.TabIndex = 4;
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(12, 456);
+			this.label3.Location = new System.Drawing.Point(12, 385);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(144, 16);
 			this.label3.TabIndex = 5;
@@ -133,7 +133,7 @@
             this.Nullable});
 			this.Tabla_FLN.Location = new System.Drawing.Point(13, 32);
 			this.Tabla_FLN.Name = "Tabla_FLN";
-			this.Tabla_FLN.Size = new System.Drawing.Size(440, 412);
+			this.Tabla_FLN.Size = new System.Drawing.Size(440, 333);
 			this.Tabla_FLN.TabIndex = 8;
 			// 
 			// Simbolo
