@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace LFA_Sergio_Lara
 {
-	public class Set
+	class Error
 	{
-		public string ID { get; set; }
-		public List<Rango> Rangos { get; set; }
 	}
 }

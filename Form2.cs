@@ -10,7 +10,13 @@ namespace LFA_Sergio_Lara
 	public partial class Form2 : Form
 	{
 		Nodo Arbol = new Nodo();
-		public Form2(Nodo Arbol)
+		List<Set> ListaSets;
+		List<Token> ListaTokens;
+		List<Action> ListaActions;
+		List<string> ST = new List<string>();
+		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
+
+		public Form2(Nodo Arbol, List<Set> SETs, List<Token> TOKENs, List<Action> ACTIONs)
 		{
 			this.Arbol = Arbol;
 			Tablas Tablas = new Tablas(Arbol);
@@ -19,6 +25,13 @@ namespace LFA_Sergio_Lara
 			List<string[]> RowFollow = Tablas.getTablaFollow();
 			List<string[]> RowEstados = Tablas.getTablaEstados();
 			List<string> Column = Tablas.getColumnas();
+
+			ListaActions = ACTIONs;
+			ListaSets = SETs;
+			ListaTokens = TOKENs;
+			ST = Tablas.getColumnas();
+			Estados = Tablas.getEstados();
+
 			InitializeComponent();
 			foreach (var item in RowFLN)
 				Tabla_FLN.Rows.Add(item);
@@ -37,9 +50,13 @@ namespace LFA_Sergio_Lara
 				Tabla_Estados.Rows.Add(item);
 
 			//Dibujar Arbol
-			GrafoAB Grafo = new GrafoAB(Arbol);
-			string pathApp = Environment.CurrentDirectory;
-			pictureBox1.Image = Grafo.CrearGrafo(pathApp);
+			try
+			{
+				GrafoAB Grafo = new GrafoAB(Arbol);
+				string pathApp = Environment.CurrentDirectory;
+				pictureBox1.Image = Grafo.CrearGrafo(pathApp);
+			}
+			catch { };
 		}
 
 		private void label1_Click(object sender, EventArgs e)
@@ -54,6 +71,19 @@ namespace LFA_Sergio_Lara
 
 		private void Form2_Load(object sender, EventArgs e)
 		{
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			string pathCarpeta = "";
+			FolderBrowserDialog fbd = new FolderBrowserDialog();
+			if (fbd.ShowDialog() == DialogResult.OK)
+				pathCarpeta = fbd.SelectedPath;
+			fbd.Dispose();
+
+			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, ST, Estados);
+			G.GenerarPrograma(pathCarpeta + "\\Automata" );
+
 		}
 	}
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LFA_Sergio_Lara
 {
-	class Rango
+	public class Rango
 	{
 		public int Inicio { get; set; }
 		public int Fin { get; set; }

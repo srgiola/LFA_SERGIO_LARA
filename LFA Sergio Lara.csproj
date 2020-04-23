@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action.cs" />
     <Compile Include="Arbol ER.cs" />
     <Compile Include="FileDotEngine.cs" />
     <Compile Include="Form1.cs">
@@ -60,6 +61,7 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="GeneradorAutomata.cs" />
     <Compile Include="GrafoAB.cs" />
     <Compile Include="Mensaje.cs" />
     <Compile Include="Nodo.cs" />

@@ -281,5 +281,9 @@ namespace LFA_Sergio_Lara
 			}
 			return Retorno;
 		}
+		public Dictionary<string, string[]> getEstados()
+		{
+			return Estados;
+		}
 	}
 }

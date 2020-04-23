@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LFA_Sergio_Lara
+namespace Automata
 {
-	public class Set
+	class Automata
 	{
-		public string ID { get; set; }
-		public List<Rango> Rangos { get; set; }
+		public string Analizar(string Cadena)
+		{
+			return "H";
+		}
 	}
 }

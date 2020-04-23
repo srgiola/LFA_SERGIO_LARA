@@ -16,6 +16,7 @@ namespace LFA_Sergio_Lara
 
 		private List<Set> ListaSETS = new List<Set>();
 		private List<Token> ListaTokens = new List<Token>();
+		private List<Action> ListaActions = new List<Action>();
 
 		private bool TOKENS_ = false;
 		private bool ACTIONS_ = false;
@@ -120,6 +121,9 @@ namespace LFA_Sergio_Lara
 						if (ListaTokens.Count() < 1)
 						{
 							Mensaje Mensaje2 = GuardarTokens(pathArchivo);
+							if (Mensaje2 != null)
+								return Mensaje2;
+							Mensaje2 = GuardarActions(pathArchivo);
 							if (Mensaje2 != null)
 								return Mensaje2;
 						}
@@ -703,15 +707,6 @@ namespace LFA_Sergio_Lara
 					catch { }
 					i += 2;
 				}
-				else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
-				{
-					//Quitar este if para la tercera fase
-					if (ER[ER.Length - 1] == '.')
-					{
-						ER = ER.Substring(0, ER.Length - 1);
-					}
-					i += 13;
-				}
 				else if (Char.IsLetter(linea[i]))
 				{
 					if (Char.IsUpper(linea[i]))
@@ -723,9 +718,7 @@ namespace LFA_Sergio_Lara
 						if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
 						{
 							//Texto descomentar para la tercera fase
-							//ER += "<" + palabra + ">./(./)";
-							//i += 2;
-							
+							ER += "<" + palabra + "()>./(./)";
 							i += 2;
 						}
 						else
@@ -892,6 +885,52 @@ namespace LFA_Sergio_Lara
 			}
 			return null;
 		}
+		private Mensaje GuardarActions(string pathArchivo)
+		{
+			string linea = "";
+			bool IN = false;
+			bool IN2 = false;
+			Action A = new Action();
+			using (var file = new StreamReader(pathArchivo))
+			{
+				while ((linea = file.ReadLine()) != null)
+				{
+					linea = linea.Replace("\t", "");
+					linea = linea.Replace(" ", "");
+					if (linea == "ACTIONS")
+						IN = true;
+					try
+					{
+						if (linea.Substring(0, 5) == "ERROR")
+							return null;
+					}catch { }
+
+					if (IN && IN2 && linea != "{" && linea != "}")
+					{
+						string[] P = linea.Split('=');
+						var P2 = P[1].Replace("\'", "");
+						if (A.Actions == null)
+							A.Actions = new Dictionary<string, int>();
+						A.Actions.Add(P[1], int.Parse(P[0]));
+					}
+
+					if (IN && linea.Contains("(") && linea.Contains(")"))
+					{
+						A = new Action();
+						IN2 = true;
+						A.ID = linea;
+					}
+
+					if (linea.Contains("}"))
+					{
+						IN2 = false;
+						if (A.ID != null)
+							ListaActions.Add(A);
+					}
+				}
+			}
+			return null;
+		}
 		private bool buscarToken(int ID)
 		{
 			foreach (var item in ListaTokens)
@@ -921,6 +960,18 @@ namespace LFA_Sergio_Lara
 			ER += ")";
 			Nodo Arbol = A.Arbol(ER);
 			return Arbol;
+		}
+		public List<Set> getSets()
+		{
+			return ListaSETS;
+		}
+		public List<Token> getTokens()
+		{
+			return ListaTokens;
+		}
+		public List<Action> getActions()
+		{
+			return ListaActions;
 		}
 	}
 }

@@ -70,7 +70,7 @@ namespace LFA_Sergio_Lara
 				else
 				{
 					//No hay errores en la primer Entrega
-					Form2 F2 = new Form2(H.ArbolTokens());
+					Form2 F2 = new Form2(H.ArbolTokens(), H.getSets(), H.getTokens(), H.getActions());
 					F2.ShowDialog();
 				} 	
 			}

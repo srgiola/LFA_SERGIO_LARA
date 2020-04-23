@@ -1,0 +1,20 @@
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\bin\Debug\Automata.exe.config
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\bin\Debug\Automata.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\bin\Debug\Automata.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.csprojAssemblyReference.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.Form1.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.Properties.Resources.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.csproj.GenerateResource.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.csproj.CoreCompileInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Automata\obj\Debug\Automata.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\bin\Debug\Automata.exe.config
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\bin\Debug\Automata.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\bin\Debug\Automata.pdb
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.csprojAssemblyReference.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.Form1.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.Properties.Resources.resources
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.csproj.GenerateResource.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.csproj.CoreCompileInputs.cache
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.exe
+C:\Users\srgio\Documents\Programas Visual Studio\Proyecto LFA\bin\Debug\Automata\obj\Debug\Automata.pdb
