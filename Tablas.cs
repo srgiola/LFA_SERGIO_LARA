@@ -16,6 +16,10 @@ namespace LFA_Sergio_Lara
 		Dictionary<int, List<int>> Follow = new Dictionary<int, List<int>>();
 		Dictionary<int, string> Hojas = new Dictionary<int, string>();
 		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
+		string EstadoInicial;
+		List<string> EAceptacion = new List<string>();
+		List<Estado> EstadosR = new List<Estado>();
+		string UF;
 
 		public Tablas(Nodo Arbol)
 		{
@@ -33,7 +37,9 @@ namespace LFA_Sergio_Lara
 
 			LlenarTablaFLN(Arbol);
 			LlenarTablaFollow(Arbol);
+			UF = UFollow();
 			Ecloshure(Arbol.First);
+			AsignarEA();
 		}
 		private void AsignarHojas(Nodo Nodo, ref int n)
 		{
@@ -197,6 +203,7 @@ namespace LFA_Sergio_Lara
 							{
 								S2 += item2 + ", ";
 							}
+							S2 = S2.Substring(0, S2.Length - 2);
 							T[i] = S2;
 						}
 						else
@@ -209,7 +216,20 @@ namespace LFA_Sergio_Lara
 					S += item + ", ";
 				}
 				S = S.Substring(0, S.Length - 2);
+
+				if (Estados.Count <= 0)
+				{
+					EstadoInicial = S;
+				}
+
 				Estados.Add(S, T);
+
+				Estado E = new Estado();
+				E.ID = S;
+				E.Transiciones = setTranciciones(T);
+				EstadosR.Add(E);
+
+				
 
 				AuxEstados = getListas(T);
 				foreach (var item in AuxEstados)
@@ -284,6 +304,56 @@ namespace LFA_Sergio_Lara
 		public Dictionary<string, string[]> getEstados()
 		{
 			return Estados;
+		}
+		private Dictionary<string, string> setTranciciones(string[] E)
+		{
+			Dictionary<string, string> T = new Dictionary<string, string>();
+			for (int i = 0; i < E.Length; i++)
+			{
+				if (E[i] != null)
+				{
+					T.Add(ST[i], E[i]);
+				}
+			}
+			return T;
+		}
+		public string getInicial()
+		{
+			return EstadoInicial;
+		}
+		public List<Estado> returnEstados()
+		{
+			return EstadosR;
+		}
+		public List<string> getEAceptacion()
+		{
+			return EAceptacion;
+		}
+		private string UFollow()
+		{
+			string U = "";
+			foreach (var item in Follow)
+			{
+				if (item.Value.Count == 0)
+				{
+					U = item.Key.ToString();
+				}
+			}
+			return U;
+		}
+		private void AsignarEA()
+		{
+			foreach (var item in EstadosR)
+			{
+				string[] P = item.ID.Split(',');
+				foreach (var item2 in P)
+				{
+					string IT = item2;
+					IT = IT.Replace(" ", "");
+					if (IT == UF)
+						EAceptacion.Add(item.ID);
+				}
+			}
 		}
 	}
 }

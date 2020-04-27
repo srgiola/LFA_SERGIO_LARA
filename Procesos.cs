@@ -590,6 +590,8 @@ namespace LFA_Sergio_Lara
 						}
 						if (palabra.Length <= 10 && PalabrasReservadas.Contains(palabra))
 						{
+							// -------------------- RESERVADAS -----------------------
+							//Tocar aca cuando desea ver lo de reservadas
 							if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
 							{
 								ER += "<" + palabra + ">";
@@ -707,6 +709,15 @@ namespace LFA_Sergio_Lara
 					catch { }
 					i += 2;
 				}
+				else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
+				{
+					//Quitar este if para la tercera fase
+					if (ER[ER.Length - 1] == '.')
+					{
+						ER = ER.Substring(0, ER.Length - 1);
+					}
+					i += 13;
+				}
 				else if (Char.IsLetter(linea[i]))
 				{
 					if (Char.IsUpper(linea[i]))
@@ -718,7 +729,7 @@ namespace LFA_Sergio_Lara
 						if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
 						{
 							//Texto descomentar para la tercera fase
-							ER += "<" + palabra + "()>./(./)";
+							//ER += "<" + palabra + "()>";
 							i += 2;
 						}
 						else
@@ -907,8 +918,8 @@ namespace LFA_Sergio_Lara
 
 					if (IN && IN2 && linea != "{" && linea != "}")
 					{
+						linea = linea.Replace("\'", "");
 						string[] P = linea.Split('=');
-						var P2 = P[1].Replace("\'", "");
 						if (A.Actions == null)
 							A.Actions = new Dictionary<string, int>();
 						A.Actions.Add(P[1], int.Parse(P[0]));

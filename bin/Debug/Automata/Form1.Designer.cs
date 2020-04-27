@@ -35,17 +35,20 @@
 			// 
 			// listBox
 			// 
+			this.listBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBox.FormattingEnabled = true;
-			this.listBox.Location = new System.Drawing.Point(12, 47);
+			this.listBox.ItemHeight = 20;
+			this.listBox.Location = new System.Drawing.Point(12, 44);
 			this.listBox.Name = "listBox";
-			this.listBox.Size = new System.Drawing.Size(1042, 459);
+			this.listBox.Size = new System.Drawing.Size(583, 464);
 			this.listBox.TabIndex = 0;
 			// 
 			// textBox
 			// 
+			this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textBox.Location = new System.Drawing.Point(12, 12);
 			this.textBox.Name = "textBox";
-			this.textBox.Size = new System.Drawing.Size(1042, 20);
+			this.textBox.Size = new System.Drawing.Size(583, 26);
 			this.textBox.TabIndex = 1;
 			this.textBox.TextChanged += new System.EventHandler(this.textBox_TextChanged);
 			// 
@@ -54,7 +57,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Gainsboro;
-			this.ClientSize = new System.Drawing.Size(1066, 519);
+			this.ClientSize = new System.Drawing.Size(609, 517);
 			this.Controls.Add(this.textBox);
 			this.Controls.Add(this.listBox);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

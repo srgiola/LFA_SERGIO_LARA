@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Action.cs" />
     <Compile Include="Arbol ER.cs" />
+    <Compile Include="Estado.cs" />
     <Compile Include="FileDotEngine.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

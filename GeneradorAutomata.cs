@@ -12,21 +12,22 @@ namespace LFA_Sergio_Lara
 		List<Set> ListaSets;
 		List<Token> ListaTokens;
 		List<Action> ListaActions;
-		List<string> ST = new List<string>();
-		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
+		Dictionary<string, Estado> Estados = new Dictionary<string, Estado>();
+		string Inicial;
+		List<string> EAceptacion = new List<string>();
 
-		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, List<string> ST_, Dictionary<string, string[]>E)
+		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, Dictionary<string, Estado> E, string I, List<string> EA)
 		{
 			ListaSets = S;
 			ListaTokens = T;
 			ListaActions = A;
-			ST = ST_;
 			Estados = E;
+			Inicial = I;
+			EAceptacion = EA;
 		}
 		public void GenerarPrograma(string pathCarpeta)
 		{
-			string sourcePath = @".\Automata";
-			CopiarArchivos(sourcePath, pathCarpeta);
+			string AutomataPath = @".\Automata\Automata.cs";
 			StringBuilder B = new StringBuilder();
 
 			B.Append("using System;" + Environment.NewLine);
@@ -43,12 +44,65 @@ namespace LFA_Sergio_Lara
 			B.Append("List<Token> ListaTokens = new List<Token>();" + Environment.NewLine);
 			B.Append("List<Action> ListaActions = new List<Action>();" + Environment.NewLine);
 			B.Append("List<string> ST = new List<string>();" + Environment.NewLine);
-			B.Append("Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();" + Environment.NewLine);
+			B.Append("Dictionary<string, Estado> Estados = new Dictionary<string, Estado>();" + Environment.NewLine);
+			B.Append("string EstadoInicial;" + Environment.NewLine);
+			B.Append("List<string> EAceptacion = new List<string>();" + Environment.NewLine);
+
+			B.Append("private void Inicializar()" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("//------------------------ SETS ----------------------------------" + Environment.NewLine);
+			B.Append(EscribirSet());
+			B.Append("//------------------------ TOKENS --------------------------------" + Environment.NewLine);
+			B.Append(EscribirToken());
+			B.Append("//------------------------ ACTIONS --------------------------------" + Environment.NewLine);
+			B.Append(EscribirActions());
+			B.Append("//------------------------ ESTADOS --------------------------------" + Environment.NewLine);
+			B.Append(EscribirEstados());
+			B.Append("}" + Environment.NewLine);
 
 			B.Append("public List<string> Analizar(string cadena)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
+			B.Append("Inicializar();" + Environment.NewLine);
 			B.Append("List<string> Retorno = new List<string>();" + Environment.NewLine);
+			// ----------------- Codigo para analizar -----------------------------------
+			B.Append("string[] A = cadena.Split(' ');" + Environment.NewLine);
+			B.Append("foreach (var item in A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("List<string> R = AnalizarActions(item);" + Environment.NewLine);
+			B.Append("if (R.Count > 0)" + Environment.NewLine);
+			B.Append("{ Retorno.AddRange(R); }" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("R = Analizador(item);" + Environment.NewLine);
+			B.Append("if (R != null)" + Environment.NewLine);
+			B.Append("{ Retorno.AddRange(R); }" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("Retorno.Add(\"La cadena [ \" + item + \" ] no coincide con la gramatica\");" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
 			B.Append("return Retorno;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+
+			B.Append("public List<string> AnalizarActions (string A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("A = A.ToUpper();" + Environment.NewLine);
+			B.Append("List<string> Retorno = new List<string>();" + Environment.NewLine);
+			B.Append("foreach (var item in ListaActions)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("int R = 0;" + Environment.NewLine);
+			B.Append("bool B = item.Actions.TryGetValue(A, out R);" + Environment.NewLine);
+			B.Append("if (B)" + Environment.NewLine);
+			B.Append("{ Retorno.Add((A + \" = \" + R)); }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("return Retorno;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+
+			B.Append("public List<string> Analizador (string A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("List<string> Retorno = new List<string>();" + Environment.NewLine);
+			B.Append("return null;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
 			B.Append("}" + Environment.NewLine);
@@ -61,14 +115,23 @@ namespace LFA_Sergio_Lara
 
 			B.Append("class Rango" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
-			B.Append("public int inicio {get; set;}" + Environment.NewLine);
-			B.Append("public int fin {get; set;}" + Environment.NewLine);
+			B.Append("public int Inicio {get; set;}" + Environment.NewLine);
+			B.Append("public int Fin {get; set;}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
 			B.Append("class Set" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public string ID {get; set;}" + Environment.NewLine);
 			B.Append("public List<Rango> Rangos {get; set;}" + Environment.NewLine);
+			B.Append("public bool Pertenece (char A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("foreach (var item in Rangos)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if(A >= item.Inicio && A <= item.Fin)" + Environment.NewLine);
+			B.Append("{ return true; }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("return false;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
 			B.Append("class Token" + Environment.NewLine);
@@ -77,7 +140,26 @@ namespace LFA_Sergio_Lara
 			B.Append("public string ER {get; set;}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
+			B.Append("class Estado" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("public string ID {get; set;}" + Environment.NewLine);
+			B.Append("public Dictionary<string, string> Transiciones {get; set;}" + Environment.NewLine);
+			B.Append("public string getTrancicion (string A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("string R = \"\";" + Environment.NewLine);
+			B.Append("bool B = Transiciones.TryGetValue(A, out R);" + Environment.NewLine);
+			B.Append("if(B)");
+			B.Append("{ return R; }" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{ return null; }");
 			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+
+			B.Append("}" + Environment.NewLine);
+
+			File.WriteAllText(AutomataPath, B.ToString());
+			string sourcePath = @".\Automata";
+			//CopiarArchivos(sourcePath, pathCarpeta);
 		}
 		private void CopiarArchivos(string pathOrigen, string pathDestino)
 		{
@@ -102,6 +184,95 @@ namespace LFA_Sergio_Lara
 				}
 			}
 		}
-		
+		private string EscribirSet()
+		{
+			StringBuilder B = new StringBuilder();
+			int C = 0;
+			int Z = 0;
+			foreach (var item in ListaSets)
+			{
+				B.Append("Set S" + C + " = new Set();" + Environment.NewLine);
+				B.Append("S"+ C + ".ID = \"" + item.ID + "\";" + Environment.NewLine);
+				B.Append("S" + C + ".Rangos = new List<Rango>();" + Environment.NewLine);
+				foreach (var item2 in item.Rangos)
+				{
+					B.Append("Rango R" + Z + " = new Rango();" + Environment.NewLine);
+					B.Append("R" + Z + ".Inicio = " + item2.Inicio + ";" + Environment.NewLine);
+					B.Append("R" + Z + ".Fin = " + item2.Fin + ";" + Environment.NewLine);
+					B.Append("S" + C + ".Rangos.Add(R" + Z + ");" + Environment.NewLine);
+					Z++;
+				}
+				B.Append("ListaSets.Add(S" + C + ");" + Environment.NewLine);
+				C++;
+			}
+			return B.ToString();
+		}
+		private string EscribirToken()
+		{
+			StringBuilder B = new StringBuilder();
+			int C = 0;
+			foreach (var item in ListaTokens)
+			{
+				B.Append("Token T" + C + " = new Token();" + Environment.NewLine);
+				B.Append("T" + C + ".ID = " + item.ID + ";" + Environment.NewLine);
+				B.Append("T" + C + ".ER = \"" + EscribirER(item.ER) + "\";" + Environment.NewLine);
+				B.Append("ListaTokens.Add(T" + C + ");" + Environment.NewLine);
+				C++;
+			}
+			return B.ToString();
+		}
+		private string EscribirER(string ER)
+		{
+			string R = "";
+			foreach (var item in ER)
+			{
+				if (item == '"')
+					R += "\\" + item;
+				else
+					R += item;
+			}
+			return R;
+		}
+		private string EscribirActions()
+		{
+			StringBuilder B = new StringBuilder();
+			int C = 0;
+			foreach (var item in ListaActions)
+			{
+				B.Append("Action A" + C + " = new Action();" + Environment.NewLine);
+				B.Append("A" + C + ".ID = \"" + item.ID + "\";" + Environment.NewLine);
+				B.Append("A" + C + ".Actions = new Dictionary<string, int>();" + Environment.NewLine);
+				foreach (var item2 in item.Actions)
+				{
+					B.Append("A" + C + ".Actions.Add(\"" + item2.Key + "\", " + item2.Value + ");" + Environment.NewLine);
+				}
+				B.Append("ListaActions.Add(A" + C + ");" + Environment.NewLine);
+				C++;
+			}
+			return B.ToString();
+		}
+		private string EscribirEstados()
+		{
+			StringBuilder B = new StringBuilder();
+			B.Append("EstadoInicial = \"" + Inicial + "\";" + Environment.NewLine);
+			foreach (var item in EAceptacion)
+			{
+				B.Append("EAceptacion.Add(\"" + item + "\");");
+			}
+			int C = 0;
+			foreach (var item in Estados)
+			{
+				B.Append("Estado E" + C + "= new Estado();" + Environment.NewLine);
+				B.Append("E" + C + ".ID = \"" + item.Key + "\";" + Environment.NewLine);
+				B.Append("E" + C + ".Transiciones = new Dictionary<string, string>();");
+				foreach (var item2 in item.Value.Transiciones)
+				{
+					B.Append("E" + C + ".Transiciones.Add(\"" + item2.Key + "\", \"" + item2.Value + "\");" + Environment.NewLine);
+				}
+				B.Append("Estados.Add(\"" + item.Key + "\", E" + C + ");" + Environment.NewLine);
+				C++;
+			}
+			return B.ToString();
+		}
 	}
 }
