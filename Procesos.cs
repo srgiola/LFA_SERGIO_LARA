@@ -379,28 +379,48 @@ namespace LFA_Sergio_Lara
 							}
 						}
 						catch
-						{
-							if (linea.Substring(0, 2).All(o => char.IsDigit(o)))
+						{					
+							try
 							{
-								Index += 2;
-								lineaQuitar += linea.Substring(0, 2);
-								linea = linea.Substring(2, linea.Length - 2);
-								Aceptacion = true;
-								Mensaje = null;
+								if (linea.Substring(0, 2).All(o => char.IsDigit(o)))
+								{
+									Index += 2;
+									lineaQuitar += linea.Substring(0, 2);
+									linea = linea.Substring(2, linea.Length - 2);
+									Aceptacion = true;
+									Mensaje = null;
+								}
+								else if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+								{
+									Index += 1;
+									lineaQuitar += linea.Substring(0, 1);
+									linea = linea.Substring(1, linea.Length - 1);
+									Aceptacion = true;
+									Mensaje = null;
+								}
+								else
+								{
+									Mensaje = new Mensaje(1, Index);
+									Mensaje.texto = "Posible solucion: Se esperaba Numero";
+									return Mensaje;
+								}
 							}
-							else if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+							catch 
 							{
-								Index += 1;
-								lineaQuitar += linea.Substring(0, 1);
-								linea = linea.Substring(1, linea.Length - 1);
-								Aceptacion = true;
-								Mensaje = null;
-							}
-							else
-							{
-								Mensaje = new Mensaje(1, Index);
-								Mensaje.texto = "Posible solucion: Se esperaba Numero";
-								return Mensaje;
+								if (linea.Substring(0, 1).All(o => char.IsDigit(o)))
+								{
+									Index += 1;
+									lineaQuitar += linea.Substring(0, 1);
+									linea = linea.Substring(1, linea.Length - 1);
+									Aceptacion = true;
+									Mensaje = null;
+								}
+								else
+								{
+									Mensaje = new Mensaje(1, Index);
+									Mensaje.texto = "Posible solucion: Se esperaba Numero";
+									return Mensaje;
+								}
 							}
 						}
 					}

@@ -59,28 +59,25 @@ namespace LFA_Sergio_Lara
 			B.Append("//------------------------ ESTADOS --------------------------------" + Environment.NewLine);
 			B.Append(EscribirEstados());
 			B.Append("}" + Environment.NewLine);
-
+			
+			// ----------------- Codigo para analizar -----------------------------------
 			B.Append("public List<string> Analizar(string cadena)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
+			B.Append("string cadena2 = \"\";" + Environment.NewLine);
 			B.Append("Inicializar();" + Environment.NewLine);
 			B.Append("List<string> Retorno = new List<string>();" + Environment.NewLine);
-			// ----------------- Codigo para analizar -----------------------------------
 			B.Append("string[] A = cadena.Split(' ');" + Environment.NewLine);
 			B.Append("foreach (var item in A)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("List<string> R = AnalizarActions(item);" + Environment.NewLine);
-			B.Append("if (R.Count > 0)" + Environment.NewLine);
-			B.Append("{ Retorno.AddRange(R); }" + Environment.NewLine);
-			B.Append("else" + Environment.NewLine);
-			B.Append("{" + Environment.NewLine);
-			B.Append("R = Analizador(item);" + Environment.NewLine);
-			B.Append("if (R != null)" + Environment.NewLine);
-			B.Append("{ Retorno.AddRange(R); }" + Environment.NewLine);
-			B.Append("else" + Environment.NewLine);
-			B.Append("{" + Environment.NewLine);
-			B.Append("Retorno.Add(\"La cadena [ \" + item + \" ] no coincide con la gramatica\");" + Environment.NewLine);
+			B.Append("if (R.Count > 0) { Retorno.AddRange(R); }" + Environment.NewLine);
+			B.Append("else { cadena2 += item + \" \"; }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-			B.Append("}" + Environment.NewLine);
+			B.Append("if (cadena2.Length > 0) { cadena2 = cadena2.Substring(0, cadena2.Length - 1); } " + Environment.NewLine);
+			B.Append("while (cadena2.Length > 0)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("string AB = \"\";" + Environment.NewLine);
+			B.Append("Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false);" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("return Retorno;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
@@ -99,26 +96,79 @@ namespace LFA_Sergio_Lara
 			B.Append("return Retorno;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
-			B.Append("public List<string> Analizador (string A)" + Environment.NewLine);
+			B.Append("public bool Analizador (ref string A, string E, string Tk, ref List<string> L, ref string AB, bool W)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
-			B.Append("List<string> Retorno = new List<string>();" + Environment.NewLine);
-			B.Append("return null;" + Environment.NewLine);
+			B.Append("Estado T;" + Environment.NewLine);
+			B.Append("if (E == null) { return false; }" + Environment.NewLine);
+			B.Append("bool B = Estados.TryGetValue(E, out T);" + Environment.NewLine);
+			B.Append("string ENuevo = \"\";" + Environment.NewLine);
+			B.Append("if (Tk.Length <= 0) { ENuevo = null; }" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("ENuevo = T.getTrancicion(Tk);" + Environment.NewLine);
+			B.Append("string A2 = A;" + Environment.NewLine);
+			B.Append("string AB2 = \"\";" + Environment.NewLine);
+			B.Append("bool Work = false;" + Environment.NewLine);
+			B.Append("try { A2 = A2.Substring(1, A2.Length - 1); } catch { }" + Environment.NewLine);
+			B.Append("if(A2.Length > 0) { Work = Analizador(ref A2, ENuevo, A2[0].ToString(), ref L, ref AB2, true); }" + Environment.NewLine);
+			B.Append("else { Work = Analizador(ref A2, ENuevo, \"\", ref L, ref AB2, true); }" + Environment.NewLine);
+			B.Append("if (ENuevo == null || !Work)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("foreach (var item in ListaSets)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if (item.Pertenece(Tk[0]) && Tk.Length == 1)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("Tk = \"<\" + item.ID + \">\";" + Environment.NewLine);
+			B.Append("ENuevo = T.getTrancicion(Tk);" + Environment.NewLine);
+			B.Append("break;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("if (ENuevo != null)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("try { AB += A.Substring(0, 1); A = A.Substring(1, A.Length - 1); } catch { }" + Environment.NewLine);
+			B.Append("if (A.Length > 0) { return Analizador(ref A, ENuevo, A[0].ToString(), ref L, ref AB, W); }" + Environment.NewLine);
+			B.Append("else { return Analizador(ref A, ENuevo, \"\", ref L, ref AB, W); }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if (EAceptacion.Contains(E))" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if (!W)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("L.Add(\"ACEPTADA [ \" + AB + \" ]\");" + Environment.NewLine);
+			B.Append("AB = \"\";" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("return true;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if(A.Length > 0) { AB += A.Substring(0, 1); A = A.Substring(1, A.Length - 1); }" + Environment.NewLine);
+			B.Append("if (!W)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("L.Add(\"RECHAZADA [ \" + AB + \" ]\");" + Environment.NewLine);
+			B.Append("AB = \"\";" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("return false;" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
-			B.Append("}" + Environment.NewLine);
-
+			// ----------------- CLASS ACTION -----------------------------------
 			B.Append("class Action" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public string ID {get; set;}" + Environment.NewLine);
 			B.Append("public Dictionary<string, int> Actions {get; set;}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-
+			// ----------------- CLASS RANGO -----------------------------------
 			B.Append("class Rango" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public int Inicio {get; set;}" + Environment.NewLine);
 			B.Append("public int Fin {get; set;}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-
+			// ----------------- CLASS SET -----------------------------------
 			B.Append("class Set" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public string ID {get; set;}" + Environment.NewLine);
@@ -133,13 +183,13 @@ namespace LFA_Sergio_Lara
 			B.Append("return false;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-
+			// ----------------- CLASS TOKEN -----------------------------------
 			B.Append("class Token" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public int ID {get; set;}" + Environment.NewLine);
 			B.Append("public string ER {get; set;}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-
+			// ----------------- CLASS ESTADO -----------------------------------
 			B.Append("class Estado" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("public string ID {get; set;}" + Environment.NewLine);
@@ -264,7 +314,7 @@ namespace LFA_Sergio_Lara
 			{
 				B.Append("Estado E" + C + "= new Estado();" + Environment.NewLine);
 				B.Append("E" + C + ".ID = \"" + item.Key + "\";" + Environment.NewLine);
-				B.Append("E" + C + ".Transiciones = new Dictionary<string, string>();");
+				B.Append("E" + C + ".Transiciones = new Dictionary<string, string>();" + Environment.NewLine);
 				foreach (var item2 in item.Value.Transiciones)
 				{
 					B.Append("E" + C + ".Transiciones.Add(\"" + item2.Key + "\", \"" + item2.Value + "\");" + Environment.NewLine);

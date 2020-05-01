@@ -23,7 +23,9 @@ namespace Automata
 			List<string> Rows =  A.Analizar(textBox.Text);
 			listBox.Items.Clear();
 			foreach (var item in Rows)
+			{
 				listBox.Items.Add(item);
+			}
 		}
 
 		private void Form1_Load(object sender, EventArgs e)

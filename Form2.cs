@@ -91,7 +91,7 @@ namespace LFA_Sergio_Lara
 				E.Add(item.ID, item);
 			}
 
-			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, ST, E, Inicial, EAceptacion);
+			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, E, Inicial, EAceptacion);
 			G.GenerarPrograma(pathCarpeta + "\\Automata" );
 			this.Close();
 		}
