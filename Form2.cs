@@ -17,8 +17,9 @@ namespace LFA_Sergio_Lara
 		string Inicial;
 		List<Estado> Estados = new List<Estado>();
 		List<string> EAceptacion = new List<string>();
+		int Error;
 
-		public Form2(Nodo Arbol, List<Set> SETs, List<Token> TOKENs, List<Action> ACTIONs)
+		public Form2(Nodo Arbol, List<Set> SETs, List<Token> TOKENs, List<Action> ACTIONs, int E_)
 		{
 			this.Arbol = Arbol;
 			Tablas Tablas = new Tablas(Arbol, TOKENs, SETs);
@@ -27,6 +28,7 @@ namespace LFA_Sergio_Lara
 			List<string[]> RowFollow = Tablas.getTablaFollow();
 			List<string[]> RowEstados = Tablas.getTablaEstados();
 			List<string> Column = Tablas.getColumnas();
+			Error = E_;
 
 			ListaActions = ACTIONs;
 			ListaSets = SETs;
@@ -91,7 +93,7 @@ namespace LFA_Sergio_Lara
 				E.Add(item.ID, item);
 			}
 
-			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, E, Inicial, EAceptacion);
+			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, E, Inicial, EAceptacion, Error);
 			G.GenerarPrograma(pathCarpeta + "\\Automata" );
 			this.Close();
 		}

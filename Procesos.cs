@@ -24,6 +24,7 @@ namespace LFA_Sergio_Lara
 		private bool RESERVADAS_ = false;
 		private bool ERROR_ = false;
 		private int cantTokens = 0;
+		private int NumError;
 
 		public void Inicializar()
 		{		
@@ -939,7 +940,11 @@ namespace LFA_Sergio_Lara
 					try
 					{
 						if (linea.Substring(0, 5) == "ERROR")
+						{
+							var x = linea.Split('=');
+							NumError = int.Parse(x[1]);
 							return null;
+						}
 					}catch { }
 
 					if (IN && IN2 && linea != "{" && linea != "}")
@@ -1009,6 +1014,10 @@ namespace LFA_Sergio_Lara
 		public List<Action> getActions()
 		{
 			return ListaActions;
+		}
+		public int getError()
+		{
+			return NumError;
 		}
 	}
 }

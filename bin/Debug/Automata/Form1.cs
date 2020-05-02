@@ -24,7 +24,8 @@ namespace Automata
 			listBox.Items.Clear();
 			foreach (var item in Rows)
 			{
-				listBox.Items.Add(item);
+				if(item != " ")
+					listBox.Items.Add(item);
 			}
 		}
 

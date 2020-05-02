@@ -458,7 +458,13 @@ namespace LFA_Sergio_Lara
 				bool B = Follows.TryGetValue(int.Parse(item), out K);
 				int TID = BuscarToken(Arbol, int.Parse(item));
 				if (B)
-					E.TokenTransicion.Add(K, TID.ToString());
+				{
+					string A = E.getTokenTransicion(K);
+					if (E.TokenTransicion.ContainsKey(K))
+						E.TokenTransicion[K] = E.TokenTransicion[K] + " " + TID.ToString();
+					else
+						E.TokenTransicion.Add(K, TID.ToString());
+				}
 			}
 			return E.TokenTransicion;
 		}
