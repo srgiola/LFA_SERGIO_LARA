@@ -17,6 +17,7 @@ namespace LFA_Sergio_Lara
 		private List<Set> ListaSETS = new List<Set>();
 		private List<Token> ListaTokens = new List<Token>();
 		private List<Action> ListaActions = new List<Action>();
+		private List<Token> ListaTokens2 = new List<Token>();
 
 		private bool TOKENS_ = false;
 		private bool ACTIONS_ = false;
@@ -107,6 +108,7 @@ namespace LFA_Sergio_Lara
 						int Index = 0;
 						bool Aceptacion = false;
 						string lineaQuitar = "";
+						string cadena = linea;
 						Mensaje Mensaje = RecorrerArbol(ArbolTOKENS, ref linea, ref Index, ref Aceptacion, ref LineaError, ref lineaQuitar);
 						if (Mensaje != null)
 						{
@@ -225,7 +227,7 @@ namespace LFA_Sergio_Lara
 				return MensajeR;
 			}
 			return null; //Si el Mensaje es "nulo" no hubo errores en la sitaxis
-		}		
+		}
 		private Mensaje RecorrerArbol(Nodo Nodo, ref string linea, ref int Index, ref bool Aceptacion, ref int lineaError, ref string lineaQuitar, Mensaje Mensaje = null)
 		{
 			if (Nodo.Contenido == "|" || Nodo.Contenido == "*")
@@ -911,6 +913,10 @@ namespace LFA_Sergio_Lara
 						linea = linea.Substring((6 + Token.ID.ToString().Length), (linea.Length - Token.ID.ToString().Length - 6));
 						Token.ER = getER(linea);
 						ListaTokens.Add(Token);
+						Token Token2 = new Token();
+						Token2.ER = linea;
+						Token2.ID = Token.ID;
+						ListaTokens2.Add(Token2);
 					}
 				}
 			}
@@ -998,7 +1004,7 @@ namespace LFA_Sergio_Lara
 		}
 		public List<Token> getTokens()
 		{
-			return ListaTokens;
+			return ListaTokens2;
 		}
 		public List<Action> getActions()
 		{

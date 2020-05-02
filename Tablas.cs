@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LFA_Sergio_Lara
 {
@@ -12,18 +13,24 @@ namespace LFA_Sergio_Lara
 		List<string[]> RowFLN = new List<string[]>();
 		List<string[]> RowFollow = new List<string[]>();
 		List<string[]> RowEstados = new List<string[]>();
+		List<Token> ListaTokens = new List<Token>();
+		List<Set> ListaSETS = new List<Set>();
 		List<string> ST = new List<string>();
 		Dictionary<int, List<int>> Follow = new Dictionary<int, List<int>>();
 		Dictionary<int, string> Hojas = new Dictionary<int, string>();
 		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
+		Dictionary<int, string> Follows = new Dictionary<int, string>();
+
 		string EstadoInicial;
 		List<string> EAceptacion = new List<string>();
 		List<Estado> EstadosR = new List<Estado>();
 		string UF;
 
-		public Tablas(Nodo Arbol)
+		public Tablas(Nodo Arbol, List<Token> LT, List<Set> LS)
 		{
 			this.Arbol = Arbol;
+			ListaTokens = LT;
+			ListaSETS = LS;
 		}
 		public void GenerarTablas()
 		{
@@ -40,6 +47,8 @@ namespace LFA_Sergio_Lara
 			UF = UFollow();
 			Ecloshure(Arbol.First);
 			AsignarEA();
+			AsignarToken(Arbol);
+			PonerTT();
 		}
 		private void AsignarHojas(Nodo Nodo, ref int n)
 		{
@@ -63,6 +72,8 @@ namespace LFA_Sergio_Lara
 				if (!ST.Contains(Nodo.Contenido))
 					ST.Add(Nodo.Contenido);
 				n++;
+
+				Nodo.TokenID = -1;
 			}
 
 			if (Nodo.Derecho != null)
@@ -137,6 +148,8 @@ namespace LFA_Sergio_Lara
 				Ls += item + ", ";
 			string[] row = new string[] { Nodo.Contenido, Fs, Ls, Nodo.Nullable.ToString() };
 			RowFLN.Add(row);
+			if (Nodo.Izquierdo == null && Nodo.Derecho == null && Nodo.First.Count == 1 && Nodo.Last.Count == 1)
+				Follows.Add(Nodo.First[0], Nodo.Contenido);
 			
 			if (Nodo.Derecho != null)
 				LlenarTablaFLN(Nodo.Derecho);
@@ -209,7 +222,6 @@ namespace LFA_Sergio_Lara
 						else
 						{
 							S2 = S2.Substring(0, S2.Length - 2);
-							//AuxEstados.Add(Follows);
 							T[i] = S2;
 						}
 					}
@@ -228,8 +240,6 @@ namespace LFA_Sergio_Lara
 				E.ID = S;
 				E.Transiciones = setTranciciones(T);
 				EstadosR.Add(E);
-
-				
 
 				AuxEstados = getListas(T);
 				foreach (var item in AuxEstados)
@@ -354,6 +364,117 @@ namespace LFA_Sergio_Lara
 						EAceptacion.Add(item.ID);
 				}
 			}
+		}
+		private void AsignarToken(Nodo Arbol)
+		{
+			foreach (var item in ListaTokens)
+			{
+				int cantItems = revisarER(item.ER);
+				int P = 0;
+				PonerToken(Arbol, ref P, cantItems, item.ID);
+			}
+		}
+		private int revisarER(string linea)
+		{
+			int cant = 0;
+			List<string> PalabrasReservadas = new List<string>();
+			foreach (var item in ListaSETS)
+			{
+				PalabrasReservadas.Add(item.ID);
+			}
+			PalabrasReservadas.Add("RESERVADAS");
+			string palabra = "";
+
+			for (int i = 0; i < linea.Length; i++)
+			{
+				if (linea[i] == '\'' && linea[i + 2] == '\'')
+				{
+					if (linea[i + 1] == '*' || linea[i + 1] == '|' || linea[i + 1] == '?' || linea[i + 1] == '+' || linea[i + 1] == ')' || linea[i + 1] == '(' || linea[i + 1] == '.' || linea[i + 1] == '<')
+						cant++;
+					else
+						cant++;
+					
+					i += 2;
+				}
+				else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
+				{ i += 13; }
+				else if (Char.IsLetter(linea[i]))
+				{
+					if (Char.IsUpper(linea[i]))
+					{
+						palabra += linea[i];
+					}
+					if (palabra.Length <= 10 && PalabrasReservadas.Contains(palabra))
+					{
+						if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
+							i += 2;
+						else
+							cant++;
+						
+						palabra = "";
+					}
+				}
+			}
+			return cant;
+		}
+		private bool PonerToken(Nodo Nodo, ref int I, int Cant, int ID)
+		{
+			if (I == Cant)
+				return true;
+
+			if (Nodo.Izquierdo != null)
+				PonerToken(Nodo.Izquierdo, ref I, Cant, ID);
+
+			if (Nodo.Izquierdo == null && Nodo.Derecho == null && Nodo.TokenID == -1)
+			{
+				Nodo.TokenID = ID;
+				I++;
+			}
+
+			if (Nodo.Derecho != null)
+				PonerToken(Nodo.Derecho, ref I, Cant, ID);
+
+			return false;
+		}
+		private void PonerTT()
+		{
+			var EstadosX = EstadosR;
+			EstadosR = new List<Estado>();
+			foreach (Estado item in EstadosX)
+			{
+				item.TokenTransicion = setTokenTransicion(item);
+				EstadosR.Add(item);
+			}
+		}
+		private Dictionary<string, string> setTokenTransicion(Estado E)
+		{
+			E.TokenTransicion = new Dictionary<string, string>();
+			string aux = E.ID;
+			aux = aux.Replace(" ", "");
+			string[] Llaves = aux.Split(',');
+			foreach (var item in Llaves)
+			{
+				string K = "";
+				bool B = Follows.TryGetValue(int.Parse(item), out K);
+				int TID = BuscarToken(Arbol, int.Parse(item));
+				if (B)
+					E.TokenTransicion.Add(K, TID.ToString());
+			}
+			return E.TokenTransicion;
+		}
+		private int BuscarToken(Nodo Nodo, int ID)
+		{
+			int R = -1;
+			if (Nodo.Izquierdo != null)
+				R = BuscarToken(Nodo.Izquierdo, ID);
+
+			if (Nodo.Izquierdo == null && Nodo.Derecho == null && Nodo.First[0] == ID && Nodo.Last[0] == ID)
+				return Nodo.TokenID;
+
+			if (Nodo.Derecho != null && R == -1)
+				R = BuscarToken(Nodo.Derecho, ID);
+
+			return R;
 		}
 	}
 }

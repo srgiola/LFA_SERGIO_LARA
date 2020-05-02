@@ -21,7 +21,7 @@ namespace LFA_Sergio_Lara
 		public Form2(Nodo Arbol, List<Set> SETs, List<Token> TOKENs, List<Action> ACTIONs)
 		{
 			this.Arbol = Arbol;
-			Tablas Tablas = new Tablas(Arbol);
+			Tablas Tablas = new Tablas(Arbol, TOKENs, SETs);
 			Tablas.GenerarTablas();
 			List<string[]> RowFLN = Tablas.getTablaFLN();
 			List<string[]> RowFollow = Tablas.getTablaFollow();

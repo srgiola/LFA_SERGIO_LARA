@@ -13,5 +13,6 @@ namespace LFA_Sergio_Lara
 		public bool Nullable { get; set; }
 		public List<int> Follow { get; set; }
 		public int ID { get; set; }
+		public int TokenID { get; set; }
 	}
 }

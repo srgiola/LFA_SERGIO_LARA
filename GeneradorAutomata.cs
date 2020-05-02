@@ -194,6 +194,7 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("public string ID {get; set;}" + Environment.NewLine);
 			B.Append("public Dictionary<string, string> Transiciones {get; set;}" + Environment.NewLine);
+			B.Append("public Dictionary<string, string> TokenTransicion {get; set;}" + Environment.NewLine);
 			B.Append("public string getTrancicion (string A)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("string R = \"\";" + Environment.NewLine);
@@ -201,7 +202,16 @@ namespace LFA_Sergio_Lara
 			B.Append("if(B)");
 			B.Append("{ return R; }" + Environment.NewLine);
 			B.Append("else" + Environment.NewLine);
-			B.Append("{ return null; }");
+			B.Append("{ return null; }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("public string getTokenTransicion (string A)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("string R = \"\";" + Environment.NewLine);
+			B.Append("bool B = TokenTransicion.TryGetValue(A, out R);" + Environment.NewLine);
+			B.Append("if(B)");
+			B.Append("{ return R; }" + Environment.NewLine);
+			B.Append("else" + Environment.NewLine);
+			B.Append("{ return null; }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
@@ -315,9 +325,14 @@ namespace LFA_Sergio_Lara
 				B.Append("Estado E" + C + "= new Estado();" + Environment.NewLine);
 				B.Append("E" + C + ".ID = \"" + item.Key + "\";" + Environment.NewLine);
 				B.Append("E" + C + ".Transiciones = new Dictionary<string, string>();" + Environment.NewLine);
+				B.Append("E" + C + ".TokenTransicion = new Dictionary<string, string>();" + Environment.NewLine);
 				foreach (var item2 in item.Value.Transiciones)
 				{
 					B.Append("E" + C + ".Transiciones.Add(\"" + item2.Key + "\", \"" + item2.Value + "\");" + Environment.NewLine);
+				}
+				foreach (var item2 in item.Value.TokenTransicion)
+				{
+					B.Append("E" + C + ".TokenTransicion.Add(\"" + item2.Key + "\", \"" + item2.Value + "\");" + Environment.NewLine);
 				}
 				B.Append("Estados.Add(\"" + item.Key + "\", E" + C + ");" + Environment.NewLine);
 				C++;

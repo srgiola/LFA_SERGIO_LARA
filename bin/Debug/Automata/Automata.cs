@@ -43,23 +43,23 @@ namespace Automata
 			//------------------------ TOKENS --------------------------------
 			Token T0 = new Token();
 			T0.ID = 1;
-			T0.ER = "(<DIGITO>.<DIGITO>*)";
+			T0.ER = "DIGITODIGITO*";
 			ListaTokens.Add(T0);
 			Token T1 = new Token();
 			T1.ID = 2;
-			T1.ER = "(=)";
+			T1.ER = "'='";
 			ListaTokens.Add(T1);
 			Token T2 = new Token();
 			T2.ID = 3;
-			T2.ER = "(:.=)";
+			T2.ER = "':''='";
 			ListaTokens.Add(T2);
 			Token T3 = new Token();
 			T3.ID = 5;
-			T3.ER = "(A.N.D)";
+			T3.ER = "'A''N''D'";
 			ListaTokens.Add(T3);
 			Token T4 = new Token();
 			T4.ID = 4;
-			T4.ER = "(<LETRA>.(<LETRA>|<DIGITO>)*)";
+			T4.ER = "LETRA(LETRA|DIGITO)*{RESERVADAS()}";
 			ListaTokens.Add(T4);
 			//------------------------ ACTIONS --------------------------------
 			Action A0 = new Action();
@@ -75,41 +75,62 @@ namespace Automata
 			EAceptacion.Add("2, 12"); EAceptacion.Add("12"); EAceptacion.Add("10, 11, 12"); Estado E0 = new Estado();
 			E0.ID = "1, 3, 4, 6, 9";
 			E0.Transiciones = new Dictionary<string, string>();
+			E0.TokenTransicion = new Dictionary<string, string>();
 			E0.Transiciones.Add("<DIGITO>", "2, 12");
 			E0.Transiciones.Add("=", "12");
 			E0.Transiciones.Add(":", "5");
 			E0.Transiciones.Add("A", "7");
 			E0.Transiciones.Add("<LETRA>", "10, 11, 12");
+			E0.TokenTransicion.Add("<DIGITO>", "1");
+			E0.TokenTransicion.Add("=", "2");
+			E0.TokenTransicion.Add(":", "3");
+			E0.TokenTransicion.Add("A", "5");
+			E0.TokenTransicion.Add("<LETRA>", "4");
 			Estados.Add("1, 3, 4, 6, 9", E0);
 			Estado E1 = new Estado();
 			E1.ID = "2, 12";
 			E1.Transiciones = new Dictionary<string, string>();
+			E1.TokenTransicion = new Dictionary<string, string>();
 			E1.Transiciones.Add("<DIGITO>", "2, 12");
+			E1.TokenTransicion.Add("<DIGITO>", "1");
+			E1.TokenTransicion.Add("#", "-1");
 			Estados.Add("2, 12", E1);
 			Estado E2 = new Estado();
 			E2.ID = "12";
 			E2.Transiciones = new Dictionary<string, string>();
+			E2.TokenTransicion = new Dictionary<string, string>();
+			E2.TokenTransicion.Add("#", "-1");
 			Estados.Add("12", E2);
 			Estado E3 = new Estado();
 			E3.ID = "5";
 			E3.Transiciones = new Dictionary<string, string>();
+			E3.TokenTransicion = new Dictionary<string, string>();
 			E3.Transiciones.Add("=", "12");
+			E3.TokenTransicion.Add("=", "3");
 			Estados.Add("5", E3);
 			Estado E4 = new Estado();
 			E4.ID = "7";
 			E4.Transiciones = new Dictionary<string, string>();
+			E4.TokenTransicion = new Dictionary<string, string>();
 			E4.Transiciones.Add("N", "8");
+			E4.TokenTransicion.Add("N", "5");
 			Estados.Add("7", E4);
 			Estado E5 = new Estado();
 			E5.ID = "8";
 			E5.Transiciones = new Dictionary<string, string>();
+			E5.TokenTransicion = new Dictionary<string, string>();
 			E5.Transiciones.Add("D", "12");
+			E5.TokenTransicion.Add("D", "5");
 			Estados.Add("8", E5);
 			Estado E6 = new Estado();
 			E6.ID = "10, 11, 12";
 			E6.Transiciones = new Dictionary<string, string>();
+			E6.TokenTransicion = new Dictionary<string, string>();
 			E6.Transiciones.Add("<DIGITO>", "10, 11, 12");
 			E6.Transiciones.Add("<LETRA>", "10, 11, 12");
+			E6.TokenTransicion.Add("<LETRA>", "4");
+			E6.TokenTransicion.Add("<DIGITO>", "4");
+			E6.TokenTransicion.Add("#", "-1");
 			Estados.Add("10, 11, 12", E6);
 		}
 		public List<string> Analizar(string cadena)
@@ -237,10 +258,19 @@ namespace Automata
 	{
 		public string ID { get; set; }
 		public Dictionary<string, string> Transiciones { get; set; }
+		public Dictionary<string, string> TokenTransicion { get; set; }
 		public string getTrancicion(string A)
 		{
 			string R = "";
 			bool B = Transiciones.TryGetValue(A, out R);
+			if (B) { return R; }
+			else
+			{ return null; }
+		}
+		public string getTokenTransicion(string A)
+		{
+			string R = "";
+			bool B = TokenTransicion.TryGetValue(A, out R);
 			if (B) { return R; }
 			else
 			{ return null; }
