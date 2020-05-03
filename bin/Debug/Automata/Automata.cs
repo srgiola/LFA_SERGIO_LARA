@@ -334,7 +334,19 @@ if (EAceptacion.Contains(E))
 {
 if (!W)
 {
-L.Add(AB + "=" + Token);
+if (Token.Legth > 2)
+{
+string[] Partes = Token.Split(' ');
+List<string> Aux = new List<string>();
+Aux.AddRange(Partes);
+foreach (var item in T.TokenTransicion)
+{
+if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }
+}
+Token = Aux[0];
+L.Add(AB + " = " + Token);
+}
+else { L.Add(AB + " = " + Token); }
 AB = "";
 }
 return true;

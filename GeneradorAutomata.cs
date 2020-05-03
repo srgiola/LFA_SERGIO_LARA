@@ -63,7 +63,7 @@ namespace LFA_Sergio_Lara
 			B.Append("//------------------------ ESTADOS --------------------------------" + Environment.NewLine);
 			B.Append(EscribirEstados());
 			B.Append("}" + Environment.NewLine);
-			
+
 			// ----------------- Codigo para analizar -----------------------------------
 			B.Append("public List<string> Analizar(string cadena)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
@@ -142,7 +142,19 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("if (!W)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
-			B.Append("L.Add(AB + \"=\" + Token);" + Environment.NewLine);
+			B.Append("if (Token.Length > 2)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("string[] Partes = Token.Split(' ');" + Environment.NewLine);
+			B.Append("List<string> Aux = new List<string>();" + Environment.NewLine);
+			B.Append("Aux.AddRange(Partes);" + Environment.NewLine);
+			B.Append("foreach (var item in T.TokenTransicion)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("Token = Aux[0];" + Environment.NewLine);
+			B.Append("L.Add(AB + \" = \" + Token);" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("else { L.Add(AB + \" = \" + Token); }" + Environment.NewLine);
 			B.Append("AB = \"\";" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("return true;" + Environment.NewLine);
