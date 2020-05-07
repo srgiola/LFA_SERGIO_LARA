@@ -14,6 +14,7 @@ Dictionary<string, Estado> Estados = new Dictionary<string, Estado>();
 string EstadoInicial;
 List<string> EAceptacion = new List<string>();
 int ERROR;
+Dictionary<string, string> Hojas = new Dictionary<string, string>();
 private void Inicializar()
 {
 ERROR = 54;
@@ -424,6 +425,63 @@ E22.TokenTransicion.Add("<LETRA>", "3");
 E22.TokenTransicion.Add("<DIGITO>", "3");
 E22.TokenTransicion.Add("#", "-1");
 Estados.Add("54, 55, 56", E22);
+//------------------------ HOJAS  --------------------------------
+Hojas.Add("1", "<DIGITO>");
+Hojas.Add("2", "<DIGITO>");
+Hojas.Add("3", """);
+Hojas.Add("4", "<CHARSET>");
+Hojas.Add("5", """);
+Hojas.Add("6", "'");
+Hojas.Add("7", "<CHARSET>");
+Hojas.Add("8", "'");
+Hojas.Add("9", "=");
+Hojas.Add("10", "/<");
+Hojas.Add("11", ">");
+Hojas.Add("12", "/<");
+Hojas.Add("13", ">");
+Hojas.Add("14", ">");
+Hojas.Add("15", "=");
+Hojas.Add("16", "/<");
+Hojas.Add("17", "=");
+Hojas.Add("18", "/+");
+Hojas.Add("19", "-");
+Hojas.Add("20", "O");
+Hojas.Add("21", "R");
+Hojas.Add("22", "/*");
+Hojas.Add("23", "A");
+Hojas.Add("24", "N");
+Hojas.Add("25", "D");
+Hojas.Add("26", "M");
+Hojas.Add("27", "O");
+Hojas.Add("28", "D");
+Hojas.Add("29", "D");
+Hojas.Add("30", "I");
+Hojas.Add("31", "V");
+Hojas.Add("32", "N");
+Hojas.Add("33", "O");
+Hojas.Add("34", "T");
+Hojas.Add("35", "/(");
+Hojas.Add("36", "/*");
+Hojas.Add("37", "/*");
+Hojas.Add("38", "/)");
+Hojas.Add("39", ";");
+Hojas.Add("40", "/.");
+Hojas.Add("41", "{");
+Hojas.Add("42", "}");
+Hojas.Add("43", "/(");
+Hojas.Add("44", "/)");
+Hojas.Add("45", "[");
+Hojas.Add("46", "]");
+Hojas.Add("47", "/.");
+Hojas.Add("48", "/.");
+Hojas.Add("49", ":");
+Hojas.Add("50", ",");
+Hojas.Add("51", ":");
+Hojas.Add("52", "=");
+Hojas.Add("53", "<LETRA>");
+Hojas.Add("54", "<LETRA>");
+Hojas.Add("55", "<DIGITO>");
+Hojas.Add("56", "#");
 }
 public List<string> Analizar(string cadena)
 {
@@ -441,7 +499,7 @@ if (cadena2.Length > 0) { cadena2 = cadena2.Substring(0, cadena2.Length - 1); }
 while (cadena2.Length > 0)
 {
 string AB = "";
-Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false, "-1");
+string LTk = "";Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false, "-1", LTk);
 }
 return Retorno;
 }
@@ -458,7 +516,7 @@ if (B)
 }
 return Retorno;
 }
-public bool Analizador (ref string A, string E, string Tk, ref List<string> L, ref string AB, bool W, string Token)
+public bool Analizador (ref string A, string E, string Tk, ref List<string> L, ref string AB, bool W, string Token, string LTk)
 {
 Estado T;
 if (E == null) { return false; }
@@ -472,8 +530,8 @@ string A2 = A;
 string AB2 = "";
 bool Work = false;
 try { A2 = A2.Substring(1, A2.Length - 1); } catch { }
-if(A2.Length > 0) { Work = Analizador(ref A2, ENuevo, A2[0].ToString(), ref L, ref AB2, true, Token); }
-else { Work = Analizador(ref A2, ENuevo, "", ref L, ref AB2, true, Token); }
+if(A2.Length > 0) { Work = Analizador(ref A2, ENuevo, A2[0].ToString(), ref L, ref AB2, true, Token, LTk); }
+else { Work = Analizador(ref A2, ENuevo, "", ref L, ref AB2, true, Token, LTk); }
 if (ENuevo == null || !Work)
 {
 foreach (var item in ListaSets)
@@ -491,12 +549,12 @@ if (ENuevo != null)
 {
 Token = T.getTokenTransicion(Tk);
 try { AB += A.Substring(0, 1); A = A.Substring(1, A.Length - 1); } catch { }
-if (A.Length > 0) { return Analizador(ref A, ENuevo, A[0].ToString(), ref L, ref AB, W, Token); }
-else { return Analizador(ref A, ENuevo, "", ref L, ref AB, W, Token); }
+if (A.Length > 0) { return Analizador(ref A, ENuevo, A[0].ToString(), ref L, ref AB, W, Token, LTk); }
+else { return Analizador(ref A, ENuevo, "", ref L, ref AB, W, Token, LTk); }
 }
 else
 {
-if (EAceptacion.Contains(E))
+if (EAceptacion.Contains(E) && E != EstadoInicial)
 {
 if (!W)
 {
@@ -509,7 +567,7 @@ foreach (var item in T.TokenTransicion)
 {
 if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }
 }
-Token = Aux[0];
+try{ Token = Aux[0]; } catch { }
 L.Add(AB + " = " + Token);
 }
 else { L.Add(AB + " = " + Token); }

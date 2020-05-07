@@ -16,8 +16,9 @@ namespace LFA_Sergio_Lara
 		string Inicial;
 		int Error;
 		List<string> EAceptacion = new List<string>();
+		Dictionary<string, string> Hojas = new Dictionary<string, string>();
 
-		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, Dictionary<string, Estado> E, string I, List<string> EA, int Error_)
+		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, Dictionary<string, Estado> E, string I, List<string> EA, int Error_, Dictionary<string, string> H)
 		{
 			ListaSets = S;
 			ListaTokens = T;
@@ -26,6 +27,7 @@ namespace LFA_Sergio_Lara
 			Inicial = I;
 			EAceptacion = EA;
 			Error = Error_;
+			Hojas = H;
 		}
 		public void GenerarPrograma(string pathCarpeta)
 		{
@@ -50,6 +52,7 @@ namespace LFA_Sergio_Lara
 			B.Append("string EstadoInicial;" + Environment.NewLine);
 			B.Append("List<string> EAceptacion = new List<string>();" + Environment.NewLine);
 			B.Append("int ERROR;" + Environment.NewLine);
+			B.Append("Dictionary<string, string> Hojas = new Dictionary<string, string>();" + Environment.NewLine);
 
 			B.Append("private void Inicializar()" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
@@ -62,6 +65,8 @@ namespace LFA_Sergio_Lara
 			B.Append(EscribirActions());
 			B.Append("//------------------------ ESTADOS --------------------------------" + Environment.NewLine);
 			B.Append(EscribirEstados());
+			B.Append("//------------------------ HOJAS  --------------------------------" + Environment.NewLine);
+			B.Append(EscribirHojas());
 			B.Append("}" + Environment.NewLine);
 
 			// ----------------- Codigo para analizar -----------------------------------
@@ -81,7 +86,8 @@ namespace LFA_Sergio_Lara
 			B.Append("while (cadena2.Length > 0)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("string AB = \"\";" + Environment.NewLine);
-			B.Append("Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false, \"-1\");" + Environment.NewLine);
+			B.Append("string LTk = \"\";");
+			B.Append("Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false, \"-1\", LTk);" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("return Retorno;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
@@ -100,7 +106,7 @@ namespace LFA_Sergio_Lara
 			B.Append("return Retorno;" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 
-			B.Append("public bool Analizador (ref string A, string E, string Tk, ref List<string> L, ref string AB, bool W, string Token)" + Environment.NewLine);
+			B.Append("public bool Analizador (ref string A, string E, string Tk, ref List<string> L, ref string AB, bool W, string Token, string LTk)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("Estado T;" + Environment.NewLine);
 			B.Append("if (E == null) { return false; }" + Environment.NewLine);
@@ -114,8 +120,8 @@ namespace LFA_Sergio_Lara
 			B.Append("string AB2 = \"\";" + Environment.NewLine);
 			B.Append("bool Work = false;" + Environment.NewLine);
 			B.Append("try { A2 = A2.Substring(1, A2.Length - 1); } catch { }" + Environment.NewLine);
-			B.Append("if(A2.Length > 0) { Work = Analizador(ref A2, ENuevo, A2[0].ToString(), ref L, ref AB2, true, Token); }" + Environment.NewLine);
-			B.Append("else { Work = Analizador(ref A2, ENuevo, \"\", ref L, ref AB2, true, Token); }" + Environment.NewLine);
+			B.Append("if(A2.Length > 0) { Work = Analizador(ref A2, ENuevo, A2[0].ToString(), ref L, ref AB2, true, Token, LTk); }" + Environment.NewLine);
+			B.Append("else { Work = Analizador(ref A2, ENuevo, \"\", ref L, ref AB2, true, Token, LTk); }" + Environment.NewLine);
 			B.Append("if (ENuevo == null || !Work)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("foreach (var item in ListaSets)" + Environment.NewLine);
@@ -133,12 +139,12 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("Token = T.getTokenTransicion(Tk);" + Environment.NewLine);
 			B.Append("try { AB += A.Substring(0, 1); A = A.Substring(1, A.Length - 1); } catch { }" + Environment.NewLine);
-			B.Append("if (A.Length > 0) { return Analizador(ref A, ENuevo, A[0].ToString(), ref L, ref AB, W, Token); }" + Environment.NewLine);
-			B.Append("else { return Analizador(ref A, ENuevo, \"\", ref L, ref AB, W, Token); }" + Environment.NewLine);
+			B.Append("if (A.Length > 0) { return Analizador(ref A, ENuevo, A[0].ToString(), ref L, ref AB, W, Token, LTk); }" + Environment.NewLine);
+			B.Append("else { return Analizador(ref A, ENuevo, \"\", ref L, ref AB, W, Token, LTk); }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("else" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
-			B.Append("if (EAceptacion.Contains(E))" + Environment.NewLine);
+			B.Append("if (EAceptacion.Contains(E) && E != EstadoInicial)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("if (!W)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
@@ -151,7 +157,7 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-			B.Append("Token = Aux[0];" + Environment.NewLine);
+			B.Append("try{ Token = Aux[0]; } catch { }" + Environment.NewLine);
 			B.Append("L.Add(AB + \" = \" + Token);" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("else { L.Add(AB + \" = \" + Token); }" + Environment.NewLine);
@@ -366,6 +372,18 @@ namespace LFA_Sergio_Lara
 				C++;
 			}
 			return B.ToString();
+		}
+		private string EscribirHojas()
+		{
+			StringBuilder B = new StringBuilder();
+			foreach (var item in Hojas)
+			{
+				if(item.Value == "\"")
+					B.Append("Hojas.Add(\"" + item.Key + "\", \"\\" + item.Value + "\");" + Environment.NewLine);
+				else
+					B.Append("Hojas.Add(\"" + item.Key + "\", \"" + item.Value + "\");" + Environment.NewLine);
+			}
+			return B.ToString(); ;
 		}
 	}
 }
