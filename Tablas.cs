@@ -21,6 +21,7 @@ namespace LFA_Sergio_Lara
 		Dictionary<string, string[]> Estados = new Dictionary<string, string[]>();
 		Dictionary<int, string> Follows = new Dictionary<int, string>();
 		Dictionary<string, string> HojasMandar = new Dictionary<string, string>();
+		string UltimaHoja;
 
 		string EstadoInicial;
 		List<string> EAceptacion = new List<string>();
@@ -53,6 +54,7 @@ namespace LFA_Sergio_Lara
 			Dictionary<string, string> Aux = new Dictionary<string, string>();
 			ConseguirHojas(Arbol, ref Aux);
 			HojasMandar = Aux;
+			UltimaHoja = Arbol.Derecho.First[0].ToString();
 		}
 		private void AsignarHojas(Nodo Nodo, ref int n)
 		{
@@ -492,7 +494,7 @@ namespace LFA_Sergio_Lara
 				ConseguirHojas(Nodo.Izquierdo, ref Hojas);
 
 			if (Nodo.Izquierdo == null && Nodo.Derecho == null && Nodo.Last.Count == 1 && Nodo.First.Count == 1)
-				Hojas.Add(Nodo.First[0].ToString(), Nodo.Contenido);
+				Hojas.Add(Nodo.First[0].ToString(), Nodo.TokenID.ToString());
 
 			if (Nodo.Derecho != null)
 				ConseguirHojas(Nodo.Derecho, ref Hojas);
@@ -500,6 +502,10 @@ namespace LFA_Sergio_Lara
 		public Dictionary<string, string> getMandarHojas()
 		{
 			return HojasMandar;
+		}
+		public string getUltimaHoja()
+		{
+			return UltimaHoja;
 		}
 	}
 }

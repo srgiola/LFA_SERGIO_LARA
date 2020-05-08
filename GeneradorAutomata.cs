@@ -17,8 +17,8 @@ namespace LFA_Sergio_Lara
 		int Error;
 		List<string> EAceptacion = new List<string>();
 		Dictionary<string, string> Hojas = new Dictionary<string, string>();
-
-		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, Dictionary<string, Estado> E, string I, List<string> EA, int Error_, Dictionary<string, string> H)
+		string UH;
+		public GeneradorAutomata(List<Set> S, List<Token> T, List<Action> A, Dictionary<string, Estado> E, string I, List<string> EA, int Error_, Dictionary<string, string> H, string UU)
 		{
 			ListaSets = S;
 			ListaTokens = T;
@@ -28,6 +28,7 @@ namespace LFA_Sergio_Lara
 			EAceptacion = EA;
 			Error = Error_;
 			Hojas = H;
+			UH = UU;
 		}
 		public void GenerarPrograma(string pathCarpeta)
 		{
@@ -66,6 +67,7 @@ namespace LFA_Sergio_Lara
 			B.Append("//------------------------ ESTADOS --------------------------------" + Environment.NewLine);
 			B.Append(EscribirEstados());
 			B.Append("//------------------------ HOJAS  --------------------------------" + Environment.NewLine);
+			B.Append("//Key Firts y Last  --> Value TokenID" + Environment.NewLine);
 			B.Append(EscribirHojas());
 			B.Append("}" + Environment.NewLine);
 
@@ -86,7 +88,7 @@ namespace LFA_Sergio_Lara
 			B.Append("while (cadena2.Length > 0)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
 			B.Append("string AB = \"\";" + Environment.NewLine);
-			B.Append("string LTk = \"\";");
+			B.Append("string LTk = \"\";" + Environment.NewLine);
 			B.Append("Analizador(ref cadena2, EstadoInicial, cadena2[0].ToString(), ref Retorno, ref AB, false, \"-1\", LTk);" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("return Retorno;" + Environment.NewLine);
@@ -134,6 +136,7 @@ namespace LFA_Sergio_Lara
 			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
+			B.Append("if (ENuevo != null) { LTk = T.ID; }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("if (ENuevo != null)" + Environment.NewLine);
 			B.Append("{" + Environment.NewLine);
@@ -157,7 +160,32 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-			B.Append("try{ Token = Aux[0]; } catch { }" + Environment.NewLine);
+
+			B.Append("try{ Token = Aux[0]; }" + Environment.NewLine);
+			B.Append("catch {" + Environment.NewLine);
+			B.Append("Aux = new List<string>();" + Environment.NewLine);
+			B.Append("Token = \"\";" + Environment.NewLine);
+			B.Append("foreach (var item in Partes)" + Environment.NewLine);
+			B.Append("{ if (!Aux.Contains(item)) { Aux.Add(item); Token += item + \" \"; } }" + Environment.NewLine);
+			B.Append("List<string> EActual = new List<string>();" + Environment.NewLine);
+			B.Append("List<string> EAnterios = new  List<string>();" + Environment.NewLine);
+			B.Append("List<string> Iguales = new List<string>();" + Environment.NewLine);
+			B.Append("string x2 = T.ID.Replace(\",\", \"\");" + Environment.NewLine);
+			B.Append("string y2 = LTk.Replace(\",\", \"\");" + Environment.NewLine);
+			B.Append("string[] x = x2.Split(' ');" + Environment.NewLine);
+			B.Append("string[] y = y2.Split(' ');" + Environment.NewLine);
+			B.Append("EActual.AddRange(x);" + Environment.NewLine);
+			B.Append("EAnterior.AddRange(y);" + Environment.NewLine);
+			B.Append("foreach (var item in EActual)" + Environment.NewLine);
+			B.Append("{ if (EAnterior.Contains(item)) { Iguales.Add(item); } }" + Environment.NewLine);
+			B.Append("Token = \"\"; " + Environment.NewLine);
+			B.Append("foreach (var item in Iguales)" + Environment.NewLine);
+			B.Append("{" + Environment.NewLine);
+			B.Append("string NT = \"\";" + Environment.NewLine);
+			B.Append("bool C = Hojas.TryGetValue(item, out NT);" + Environment.NewLine);
+			B.Append("if (C) { Token += NT + \" \"; }" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
+			B.Append("}" + Environment.NewLine);
 			B.Append("L.Add(AB + \" = \" + Token);" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
 			B.Append("else { L.Add(AB + \" = \" + Token); }" + Environment.NewLine);
@@ -378,8 +406,7 @@ namespace LFA_Sergio_Lara
 			StringBuilder B = new StringBuilder();
 			foreach (var item in Hojas)
 			{
-				if(item.Value == "\"")
-					B.Append("Hojas.Add(\"" + item.Key + "\", \"\\" + item.Value + "\");" + Environment.NewLine);
+				if (item.Key == UH) { }
 				else
 					B.Append("Hojas.Add(\"" + item.Key + "\", \"" + item.Value + "\");" + Environment.NewLine);
 			}

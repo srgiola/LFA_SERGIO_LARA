@@ -19,7 +19,7 @@ namespace LFA_Sergio_Lara
 		List<string> EAceptacion = new List<string>();
 		int Error;
 		Dictionary<string, string> Hojas = new Dictionary<string, string>();
-
+		string UH;
 		public Form2(Nodo Arbol, List<Set> SETs, List<Token> TOKENs, List<Action> ACTIONs, int E_)
 		{
 			this.Arbol = Arbol;
@@ -39,7 +39,7 @@ namespace LFA_Sergio_Lara
 			EAceptacion = Tablas.getEAceptacion();
 			Inicial = Tablas.getInicial();
 			Hojas = Tablas.getMandarHojas();
-
+			UH = Tablas.getUltimaHoja();
 			InitializeComponent();
 			foreach (var item in RowFLN)
 				Tabla_FLN.Rows.Add(item);
@@ -95,7 +95,7 @@ namespace LFA_Sergio_Lara
 				E.Add(item.ID, item);
 			}
 
-			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, E, Inicial, EAceptacion, Error, Hojas);
+			GeneradorAutomata G = new GeneradorAutomata(ListaSets, ListaTokens, ListaActions, E, Inicial, EAceptacion, Error, Hojas, UH);
 			G.GenerarPrograma(pathCarpeta + "\\Automata" );
 			this.Close();
 		}
