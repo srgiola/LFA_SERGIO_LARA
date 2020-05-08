@@ -15,7 +15,6 @@ string EstadoInicial;
 List<string> EAceptacion = new List<string>();
 int ERROR;
 Dictionary<string, string> Hojas = new Dictionary<string, string>();
-string UltimaHoja;
 private void Inicializar()
 {
 ERROR = 54;
@@ -221,7 +220,6 @@ string ENuevo = "";
 if (Tk.Length <= 0) { ENuevo = null; }
 else
 {
-LTk = T.ID;
 ENuevo = T.getTrancicion(Tk);
 string A2 = A;
 string AB2 = "";
@@ -241,6 +239,7 @@ break;
 }
 }
 }
+if (ENuevo != null) { LTk = T.ID; }
 }
 if (ENuevo != null)
 {
@@ -270,6 +269,24 @@ Aux = new List<string>();
 Token = "";
 foreach (var item in Partes)
 { if (!Aux.Contains(item)) { Aux.Add(item); Token += item + " "; } }
+List<string> EActual = new List<string>();
+List<string> EAnterior = new  List<string>();
+List<string> Iguales = new List<string>();
+string x2 = T.ID.Replace(",", "");
+string y2 = LTk.Replace(",", "");
+string[] x = x2.Split(' ');
+string[] y = y2.Split(' ');
+EActual.AddRange(x);
+EAnterior.AddRange(y);
+foreach (var item in EActual)
+{ if (EAnterior.Contains(item)) { Iguales.Add(item); } }
+Token = ""; 
+foreach (var item in Iguales)
+{
+string NT = "";
+bool C = Hojas.TryGetValue(item, out NT);
+if (C) { Token += NT + " "; }
+}
 }
 L.Add(AB + " = " + Token);
 }

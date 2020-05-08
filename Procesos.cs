@@ -123,12 +123,12 @@ namespace LFA_Sergio_Lara
 					{
 						if (ListaTokens.Count() < 1)
 						{
-							Mensaje Mensaje2 = GuardarTokens(pathArchivo);
+							Mensaje Mensaje2 = GuardarActions(pathArchivo);
 							if (Mensaje2 != null)
 								return Mensaje2;
-							Mensaje2 = GuardarActions(pathArchivo);
+							Mensaje2 = GuardarTokens(pathArchivo);
 							if (Mensaje2 != null)
-								return Mensaje2;
+								return Mensaje2;	
 						}
 						Mensaje Mensaje = null;
 						string ActionString = linea + "t";
@@ -157,6 +157,8 @@ namespace LFA_Sergio_Lara
 									int Index = 0;
 									string lineaQuitar = "";
 									Mensaje = RecorrerArbol(ArbolActions, ref ActionString, ref Index, ref Aceptacion, ref LineaError, ref lineaQuitar);
+									if (RESERVADAS_)
+										Mensaje = null;
 									break;
 								}
 								else
@@ -712,7 +714,14 @@ namespace LFA_Sergio_Lara
 			{
 				PalabrasReservadas.Add(item.ID);
 			}
-			PalabrasReservadas.Add("RESERVADAS");
+			//PalabrasReservadas.Add("RESERVADAS");
+			foreach (var item in ListaActions)
+			{
+				string A = item.ID;
+				A = A.Replace("(", "");
+				A = A.Replace(")", "");
+				PalabrasReservadas.Add(A);
+			}
 			string palabra = "";
 			string ER = "";
 
@@ -732,14 +741,23 @@ namespace LFA_Sergio_Lara
 					catch { }
 					i += 2;
 				}
-				else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
+				//else if (linea[i] == '{' && linea[i + 1] == 'R' && linea[i + 12] == ')' && linea[i + 13] == '}')
+				//{
+				//	//Quitar este if para la tercera fase
+				//	if (ER[ER.Length - 1] == '.')
+				//	{
+				//		ER = ER.Substring(0, ER.Length - 1);
+				//	}
+				//	i += 13;
+				//}
+				else if (linea[i] == '{' || linea[i] == '}')
 				{
 					//Quitar este if para la tercera fase
 					if (ER[ER.Length - 1] == '.')
 					{
 						ER = ER.Substring(0, ER.Length - 1);
 					}
-					i += 13;
+					//i += 1;
 				}
 				else if (Char.IsLetter(linea[i]))
 				{
@@ -749,14 +767,29 @@ namespace LFA_Sergio_Lara
 					}
 					if (palabra.Length <= 10 && PalabrasReservadas.Contains(palabra))
 					{
-						if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
+						//if (palabra == "RESERVADAS" && linea[i + 1] == '(' && linea[i + 2] == ')')
+						//{
+						//	//Texto descomentar para la tercera fase
+						//	//ER += "<" + palabra + "()>";
+						//	i += 2;
+						//}
+						//else
+						//	ER += "<" + palabra + ">";
+						try
 						{
-							//Texto descomentar para la tercera fase
-							//ER += "<" + palabra + "()>";
-							i += 2;
+							if (linea[i + 1] == '(' && linea[i + 2] == ')')
+							{
+								//Texto descomentar para la tercera fase
+								//ER += "<" + palabra + "()>";
+								i += 2;
+							}
+							else
+								ER += "<" + palabra + ">";
 						}
-						else
+						catch
+						{
 							ER += "<" + palabra + ">";
+						}
 						try
 						{
 							if (linea[i + 1] != ')' && linea[i + 1] != '|' && linea[i + 1] != '*' && linea[i + 1] != '+' && linea[i + 1] != '?')

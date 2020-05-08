@@ -160,7 +160,6 @@ namespace LFA_Sergio_Lara
 			B.Append("{" + Environment.NewLine);
 			B.Append("if (Aux.Contains(item.Value)) { Aux.Remove(item.Value); }" + Environment.NewLine);
 			B.Append("}" + Environment.NewLine);
-
 			B.Append("try{ Token = Aux[0]; }" + Environment.NewLine);
 			B.Append("catch {" + Environment.NewLine);
 			B.Append("Aux = new List<string>();" + Environment.NewLine);
@@ -168,7 +167,7 @@ namespace LFA_Sergio_Lara
 			B.Append("foreach (var item in Partes)" + Environment.NewLine);
 			B.Append("{ if (!Aux.Contains(item)) { Aux.Add(item); Token += item + \" \"; } }" + Environment.NewLine);
 			B.Append("List<string> EActual = new List<string>();" + Environment.NewLine);
-			B.Append("List<string> EAnterios = new  List<string>();" + Environment.NewLine);
+			B.Append("List<string> EAnterior = new  List<string>();" + Environment.NewLine);
 			B.Append("List<string> Iguales = new List<string>();" + Environment.NewLine);
 			B.Append("string x2 = T.ID.Replace(\",\", \"\");" + Environment.NewLine);
 			B.Append("string y2 = LTk.Replace(\",\", \"\");" + Environment.NewLine);
